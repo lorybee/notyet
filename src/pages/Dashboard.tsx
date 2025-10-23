@@ -9,6 +9,7 @@ import { TotalRewardsForm } from "@/components/TotalRewardsForm";
 import { Benchmarks } from "@/components/Benchmarks";
 import MarketAnalysis from "@/components/MarketAnalysis";
 import LabourLawChat from "@/components/LabourLawChat";
+import SalaryTimeMachine from "@/components/SalaryTimeMachine";
 import { 
   BarChart3, 
   User, 
@@ -201,19 +202,7 @@ const Dashboard = () => {
             </TabsContent>
 
             <TabsContent value="calculator" className="mt-6">
-              <Card className="p-6">
-                <h3 className="text-xl font-semibold mb-4 text-foreground">Salary Time Machine</h3>
-                <p className="text-muted-foreground mb-6">
-                  Compare purchasing power: October 2020 vs October 2025
-                </p>
-                <div className="p-8 bg-muted/50 rounded-lg text-center">
-                  <Calculator className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">
-                    Inflation calculator coming soon. This will show how real salaries have changed 
-                    when adjusted for inflation between 2020 and 2025.
-                  </p>
-                </div>
-              </Card>
+              <SalaryTimeMachine />
             </TabsContent>
           </Tabs>
 
