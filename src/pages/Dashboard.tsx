@@ -7,6 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { TotalRewardsForm } from "@/components/TotalRewardsForm";
 import { Benchmarks } from "@/components/Benchmarks";
+import MarketAnalysis from "@/components/MarketAnalysis";
+import LabourLawChat from "@/components/LabourLawChat";
 import { 
   BarChart3, 
   User, 
@@ -183,47 +185,19 @@ const Dashboard = () => {
             </TabsContent>
 
             <TabsContent value="insights" className="mt-6">
-              <Card className="p-6">
-                <h3 className="text-xl font-semibold mb-4 text-foreground">AI-Powered Insights</h3>
-                <p className="text-muted-foreground mb-6">
-                  Get personalized recommendations based on your compensation data.
-                </p>
-                <div className="p-8 bg-muted/50 rounded-lg text-center">
-                  <Lightbulb className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">
-                    AI insights will appear here after you submit your compensation data.
-                  </p>
-                </div>
-              </Card>
+              <MarketAnalysis />
             </TabsContent>
 
             <TabsContent value="law" className="mt-6">
-              <Card className="p-6">
-                <h3 className="text-xl font-semibold mb-4 text-foreground">Labour Law Assistant</h3>
-                <p className="text-muted-foreground mb-4">
-                  Ask questions about Romanian labour legislation.
-                </p>
-                <div className="p-4 bg-primary/5 border border-primary/20 rounded-lg mb-6">
+              <div className="space-y-4">
+                <div className="p-4 bg-primary/5 border border-primary/20 rounded-lg">
                   <p className="text-sm text-muted-foreground">
                     ⚠️ <strong>Disclaimer:</strong> This information is for educational purposes only 
                     and does not constitute legal advice. For specific legal matters, consult a qualified attorney.
                   </p>
                 </div>
-                <div className="p-8 bg-muted/50 rounded-lg text-center">
-                  <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">
-                    Chat interface with speech support coming soon. You'll be able to ask about:
-                  </p>
-                  <ul className="text-sm text-muted-foreground mt-4 space-y-2 text-left max-w-md mx-auto">
-                    <li>• Paid leave regulations</li>
-                    <li>• Medical leave compensation</li>
-                    <li>• Meal vouchers taxation</li>
-                    <li>• Hybrid work arrangements</li>
-                    <li>• Minimum wage rules</li>
-                    <li>• Maternity/paternity benefits</li>
-                  </ul>
-                </div>
-              </Card>
+                <LabourLawChat />
+              </div>
             </TabsContent>
 
             <TabsContent value="calculator" className="mt-6">
