@@ -13,9 +13,11 @@ export const TotalRewardsForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     jobTitle: "",
+    jobFamily: "",
     experienceLevel: "",
     companySize: "",
     industry: "",
+    country: "Romania",
     city: "",
     contractType: "full-time",
     schedule: "full-time",
@@ -41,7 +43,7 @@ export const TotalRewardsForm = () => {
         company_size: formData.companySize,
         industry: formData.industry,
         city: formData.city,
-        country: "Romania",
+        country: formData.country,
         contract_type: formData.contractType,
         schedule: formData.schedule,
         work_model: formData.workModel,
@@ -65,9 +67,11 @@ export const TotalRewardsForm = () => {
       // Reset form
       setFormData({
         jobTitle: "",
+        jobFamily: "",
         experienceLevel: "",
         companySize: "",
         industry: "",
+        country: "Romania",
         city: "",
         contractType: "full-time",
         schedule: "full-time",
@@ -107,6 +111,32 @@ export const TotalRewardsForm = () => {
               placeholder="e.g. Software Engineer"
               required
             />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="jobFamily">Job Family *</Label>
+            <Select
+              value={formData.jobFamily}
+              onValueChange={(value) => setFormData({ ...formData, jobFamily: value })}
+              required
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select job family" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Engineering">Engineering</SelectItem>
+                <SelectItem value="Product">Product</SelectItem>
+                <SelectItem value="Design">Design</SelectItem>
+                <SelectItem value="Sales">Sales</SelectItem>
+                <SelectItem value="Marketing">Marketing</SelectItem>
+                <SelectItem value="Operations">Operations</SelectItem>
+                <SelectItem value="Finance">Finance</SelectItem>
+                <SelectItem value="HR">Human Resources</SelectItem>
+                <SelectItem value="Legal">Legal</SelectItem>
+                <SelectItem value="Customer Success">Customer Success</SelectItem>
+                <SelectItem value="Other">Other</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="space-y-2">
@@ -166,6 +196,27 @@ export const TotalRewardsForm = () => {
                 <SelectItem value="51-200">51-200 employees</SelectItem>
                 <SelectItem value="201-500">201-500 employees</SelectItem>
                 <SelectItem value="500+">500+ employees</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="country">Country *</Label>
+            <Select
+              value={formData.country}
+              onValueChange={(value) => setFormData({ ...formData, country: value })}
+              required
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select country" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Romania">Romania</SelectItem>
+                <SelectItem value="Bulgaria">Bulgaria</SelectItem>
+                <SelectItem value="Poland">Poland</SelectItem>
+                <SelectItem value="Hungary">Hungary</SelectItem>
+                <SelectItem value="Czech Republic">Czech Republic</SelectItem>
+                <SelectItem value="Other">Other</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -277,13 +328,13 @@ export const TotalRewardsForm = () => {
 
           {formData.hasMealVouchers && (
             <div className="space-y-2 ml-6">
-              <Label htmlFor="mealVouchersValue">Monthly Value (RON)</Label>
+              <Label htmlFor="mealVouchersValue">Daily Value (RON)</Label>
               <Input
                 id="mealVouchersValue"
                 type="number"
                 value={formData.mealVouchersValue}
                 onChange={(e) => setFormData({ ...formData, mealVouchersValue: e.target.value })}
-                placeholder="e.g. 400"
+                placeholder="e.g. 20"
               />
             </div>
           )}
