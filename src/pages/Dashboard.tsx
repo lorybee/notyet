@@ -64,7 +64,7 @@ const Dashboard = () => {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === "SIGNED_OUT" || !session) {
-        navigate("/auth");
+        navigate("/");
       } else {
         setUser(session.user);
         
