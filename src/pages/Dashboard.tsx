@@ -10,6 +10,7 @@ import { Benchmarks } from "@/components/Benchmarks";
 import MarketAnalysis from "@/components/MarketAnalysis";
 import LabourLawChat from "@/components/LabourLawChat";
 import SalaryTimeMachine from "@/components/SalaryTimeMachine";
+import { ProfileSettingsForm } from "@/components/ProfileSettingsForm";
 import { 
   BarChart3, 
   User, 
@@ -215,18 +216,11 @@ const Dashboard = () => {
 
             <TabsContent value="profile" className="mt-6">
               <Card className="p-6">
-                <h3 className="text-xl font-semibold mb-4 text-foreground">Profile Settings</h3>
-                <p className="text-muted-foreground mb-4">
+                <h3 className="text-xl font-semibold mb-2 text-foreground">Profile Settings</h3>
+                <p className="text-muted-foreground mb-6">
                   Set your default city and industry to prefill forms.
                 </p>
-                <div className="space-y-4">
-                  <div className="p-4 bg-muted/50 rounded-lg">
-                    <p className="text-sm text-muted-foreground">
-                      Profile management coming soon. For now, you can use the Total Rewards tab 
-                      to enter your compensation data.
-                    </p>
-                  </div>
-                </div>
+                <ProfileSettingsForm userId={user?.id || ''} />
               </Card>
             </TabsContent>
 
