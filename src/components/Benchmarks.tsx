@@ -461,36 +461,72 @@ export const Benchmarks = () => {
           </div>
 
           <div className="bg-background/60 p-6 rounded-lg">
-            <div className="flex items-baseline gap-3 mb-2">
-              <span className="text-4xl font-bold text-primary">
-                {userProfile.total_compensation.toLocaleString()} RON
-              </span>
-              <span className="text-lg text-muted-foreground">/month total compensation</span>
-            </div>
-            <p className="text-lg font-semibold mb-4">
-              You're at the <span className="text-primary">{userProfile.percentile}th percentile</span> for {userProfile.job_title} in {userProfile.city}
-            </p>
-            
-            <div className="space-y-2 mb-4">
-              <div className="flex justify-between text-sm text-muted-foreground">
-                <span>Min: {minSalary.toLocaleString()} RON</span>
-                <span>Max: {maxSalary.toLocaleString()} RON</span>
+            <div className="space-y-4">
+              {/* Gross Salary */}
+              <div>
+                <div className="flex items-baseline gap-3 mb-1">
+                  <span className="text-4xl font-bold text-primary">
+                    {userProfile.gross_salary.toLocaleString()} RON
+                  </span>
+                  <span className="text-lg text-muted-foreground">/month gross salary</span>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Net salary: {userProfile.net_salary.toLocaleString()} RON/month
+                </p>
               </div>
-              <div className="relative h-3 bg-muted rounded-full overflow-hidden">
-                <div 
-                  className="absolute h-full bg-gradient-to-r from-danger via-warning to-success"
-                  style={{ width: '100%' }}
-                />
-                <div 
-                  className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-background border-2 border-primary rounded-full shadow-lg"
-                  style={{ left: `${userPosition}%`, transform: 'translate(-50%, -50%)' }}
-                />
-              </div>
-            </div>
 
-            <Badge variant="outline" className="text-xs">
-              Based on {userProfile.sample_size} professionals with similar profiles
-            </Badge>
+              {/* Benefits */}
+              {(userProfile.has_meal_vouchers || userProfile.has_health_insurance || userProfile.has_life_insurance) && (
+                <div className="pt-3 border-t border-border">
+                  <p className="text-sm font-medium mb-2">Benefits:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {userProfile.has_meal_vouchers && (
+                      <Badge variant="secondary" className="text-xs">
+                        Meal Vouchers: {userProfile.meal_vouchers_value} RON/day
+                      </Badge>
+                    )}
+                    {userProfile.has_health_insurance && (
+                      <Badge variant="secondary" className="text-xs">
+                        Health Insurance
+                      </Badge>
+                    )}
+                    {userProfile.has_life_insurance && (
+                      <Badge variant="secondary" className="text-xs">
+                        Life Insurance
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Percentile */}
+              <div className="pt-3 border-t border-border">
+                <p className="text-lg font-semibold mb-4">
+                  You're at the <span className="text-primary">{userProfile.percentile}th percentile</span> for {userProfile.job_title} in {userProfile.city}
+                </p>
+                
+                <div className="space-y-2 mb-4">
+                  <div className="flex justify-between text-sm text-muted-foreground">
+                    <span>Min: {minSalary.toLocaleString()} RON</span>
+                    <span>Max: {maxSalary.toLocaleString()} RON</span>
+                  </div>
+                  <div className="relative h-3 bg-muted rounded-full overflow-hidden">
+                    <div 
+                      className="absolute h-full bg-gradient-to-r from-danger via-warning to-success"
+                      style={{ width: '100%' }}
+                    />
+                    <div 
+                      className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-background border-2 border-primary rounded-full shadow-lg"
+                      style={{ left: `${userPosition}%`, transform: 'translate(-50%, -50%)' }}
+                    />
+                  </div>
+                </div>
+
+                <Badge variant="outline" className="text-xs">
+                  Based on {userProfile.sample_size} professionals with similar profiles
+                </Badge>
+              </div>
+            </div>
           </div>
         </div>
       </Card>
