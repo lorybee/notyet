@@ -148,14 +148,39 @@ const MarketAnalysis = () => {
                 </div>
                 <div className="relative">
                   <Progress value={analysis.percentile} className="h-3" />
+                  
+                  {/* YOU marker */}
                   <div 
-                    className="absolute top-0 h-3 flex items-center" 
+                    className="absolute top-0 h-3 flex items-center z-10" 
                     style={{ left: `${analysis.percentile}%` }}
                   >
-                    <div className="bg-primary text-primary-foreground text-xs px-2 py-0.5 rounded-full -translate-x-1/2 -translate-y-6 whitespace-nowrap font-semibold">
+                    <div className="bg-primary text-primary-foreground text-xs px-2 py-0.5 rounded-full -translate-x-1/2 -translate-y-6 whitespace-nowrap font-semibold shadow-md">
                       YOU
                     </div>
                   </div>
+                  
+                  {/* Quartile markers */}
+                  <div className="absolute top-0 left-0 right-0 h-3 flex">
+                    <div className="absolute left-[25%] top-0 bottom-0 w-px bg-background/60" />
+                    <div className="absolute left-[50%] top-0 bottom-0 w-px bg-background/80" />
+                    <div className="absolute left-[75%] top-0 bottom-0 w-px bg-background/60" />
+                  </div>
+                </div>
+                
+                {/* Quartile labels */}
+                <div className="flex justify-between text-xs text-muted-foreground pt-1">
+                  <span className={analysis.percentile <= 25 ? 'font-semibold text-foreground' : ''}>
+                    Bottom 25%
+                  </span>
+                  <span className={analysis.percentile > 25 && analysis.percentile <= 50 ? 'font-semibold text-foreground' : ''}>
+                    25-50%
+                  </span>
+                  <span className={analysis.percentile > 50 && analysis.percentile <= 75 ? 'font-semibold text-foreground' : ''}>
+                    50-75%
+                  </span>
+                  <span className={analysis.percentile > 75 ? 'font-semibold text-foreground' : ''}>
+                    Top 25%
+                  </span>
                 </div>
               </div>
             </div>
