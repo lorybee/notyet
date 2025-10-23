@@ -11,7 +11,7 @@ const Landing = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
       {/* Header */}
       <header className="bg-muted/30 border-b border-border/50">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-4 py-2">
           <nav className="flex items-center justify-between">
             <img src={benchrightLogo} alt="BenchRight Logo" className="h-40" />
             <div className="flex items-center gap-6">
