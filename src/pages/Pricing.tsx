@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { Session } from "@supabase/supabase-js";
+import benchrightLogo from "@/assets/benchright-logo.png";
 
 const Pricing = () => {
   const navigate = useNavigate();
@@ -92,7 +93,9 @@ const Pricing = () => {
     <div className="min-h-screen flex flex-col">
       <header className="border-b border-border/50 py-4 px-4">
         <div className="container mx-auto flex justify-between items-center">
-          <Link to="/" className="text-2xl font-bold">BenchRight</Link>
+          <Link to="/" className="hover:opacity-80 transition-opacity">
+            <img src={benchrightLogo} alt="BenchRight Logo" className="h-40" />
+          </Link>
           <Link to="/auth">
             <Button variant="outline">Sign In</Button>
           </Link>
