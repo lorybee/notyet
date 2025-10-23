@@ -38,25 +38,28 @@ const Landing = () => {
       {/* Hero Content */}
       <section className="container mx-auto px-4 py-12 text-center">
         <div className="mx-auto max-w-5xl space-y-6">
-          <div className="bg-primary text-primary-foreground py-3 px-6 rounded-lg inline-flex items-center gap-2 text-sm mb-2">
+          <div className="bg-[#3B5998] text-white py-2 px-6 rounded-t-lg inline-flex items-center gap-2 text-sm">
             <Shield className="h-4 w-4" />
             Anonymous & Secure
           </div>
           
-          <div className="bg-primary text-primary-foreground py-6 px-8 rounded-lg max-w-3xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-              BenchRight <span className="text-green-400">Clear Pay+</span>
+          <div className="bg-[#3B5998] text-white py-8 px-8 rounded-lg max-w-4xl mx-auto -mt-6">
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
+              BenchRight <span className="text-[#4ADE80]">Clear Pay+</span>
             </h1>
           </div>
           
-          <h2 className="text-3xl md:text-4xl font-bold leading-tight pt-4">
-            <span className="text-blue-600">Together</span>{" "}
-            <span className="text-green-600">for fair pay.</span>{" "}
-            <span className="text-orange-500">Powered by data.</span>{" "}
-            <span className="text-blue-600">Driven by people.</span>
+          <h2 className="text-3xl md:text-4xl font-bold leading-tight pt-6">
+            <span className="text-[#3B82F6]">Together </span>
+            <span className="text-[#22C55E]">for fair </span>
+            <span className="text-[#F97316]">pay. </span>
+            <span className="text-[#22C55E]">Powered </span>
+            <span className="text-[#6366F1]">by data. </span>
+            <span className="text-[#F97316]">Driven </span>
+            <span className="text-[#3B82F6]">by people.</span>
           </h2>
           
-          <p className="text-xl text-foreground font-medium pt-4 max-w-3xl mx-auto">
+          <p className="text-xl text-foreground font-medium pt-6 max-w-3xl mx-auto">
             Transparent compensation benchmarking for Romania's workforce.
           </p>
           
