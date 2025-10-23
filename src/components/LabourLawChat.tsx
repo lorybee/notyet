@@ -23,18 +23,11 @@ interface Message {
   isPlaying?: boolean;
 }
 
-const QUICK_QUESTIONS_RO = [
-  "Câte zile de concediu am dreptul?",
-  "Ce sunt tichetele de masă?",
-  "Cum funcționează concediul medical?",
-  "Care sunt regulile pentru orele suplimentare?"
-];
-
-const QUICK_QUESTIONS_EN = [
+const QUICK_QUESTIONS = [
   "How many vacation days am I entitled to?",
   "What are meal vouchers?",
-  "Can my employer require overtime?",
-  "How does medical leave work?"
+  "How does medical leave work?",
+  "What are overtime rules?"
 ];
 
 const LabourLawChat = () => {
@@ -44,7 +37,6 @@ const LabourLawChat = () => {
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [interimTranscript, setInterimTranscript] = useState("");
-  const [language, setLanguage] = useState<"ro" | "en">("ro");
   const [speechSupported, setSpeechSupported] = useState(true);
   
   const { toast } = useToast();
@@ -73,7 +65,7 @@ const LabourLawChat = () => {
     
     recognition.continuous = false;
     recognition.interimResults = true;
-    recognition.lang = language === "ro" ? "ro-RO" : "en-US";
+    recognition.lang = "en-US";
     recognition.maxAlternatives = 1;
 
     recognition.onstart = () => {
@@ -133,7 +125,7 @@ const LabourLawChat = () => {
         recognitionRef.current.stop();
       }
     };
-  }, [language, speechSupported, toast]);
+  }, [speechSupported, toast]);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -174,20 +166,17 @@ const LabourLawChat = () => {
 
     // Stop any ongoing speech
     window.speechSynthesis.cancel();
-
-    // Detect language from text
-    const isRomanian = /[ăâîșțĂÂÎȘȚ]/.test(text) || language === "ro";
     
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = isRomanian ? "ro-RO" : "en-US";
+    utterance.lang = "en-US";
     utterance.rate = 0.95;
     utterance.pitch = 1.0;
     utterance.volume = 1.0;
 
-    // Try to select appropriate voice
+    // Try to select appropriate English voice
     const voices = window.speechSynthesis.getVoices();
     const preferredVoice = voices.find(voice => 
-      voice.lang.startsWith(isRomanian ? "ro" : "en")
+      voice.lang.startsWith("en")
     );
     if (preferredVoice) {
       utterance.voice = preferredVoice;
@@ -344,36 +333,16 @@ const LabourLawChat = () => {
     }
   };
 
-  const quickQuestions = language === "ro" ? QUICK_QUESTIONS_RO : QUICK_QUESTIONS_EN;
-
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader className="border-b">
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="text-2xl flex items-center gap-2">
-              🇷🇴 Labor Law Companion
-            </CardTitle>
-            <CardDescription>
-              Your Romanian workplace rights assistant
-            </CardDescription>
-          </div>
-          <div className="flex gap-2">
-            <Button
-              variant={language === "ro" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setLanguage("ro")}
-            >
-              🇷🇴 RO
-            </Button>
-            <Button
-              variant={language === "en" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setLanguage("en")}
-            >
-              🇬🇧 EN
-            </Button>
-          </div>
+        <div>
+          <CardTitle className="text-2xl flex items-center gap-2">
+            🇷🇴 Labor Law Companion
+          </CardTitle>
+          <CardDescription>
+            Your Romanian workplace rights assistant
+          </CardDescription>
         </div>
 
         {/* Disclaimer */}
@@ -395,15 +364,13 @@ const LabourLawChat = () => {
               <div className="text-6xl">⚖️</div>
               <div>
                 <h3 className="text-lg font-semibold mb-2">
-                  {language === "ro" ? "Bine ați venit!" : "Welcome!"}
+                  Welcome!
                 </h3>
                 <p className="text-muted-foreground mb-4">
-                  {language === "ro" 
-                    ? "Adresați-mi întrebări despre drepturile dumneavoastră la locul de muncă"
-                    : "Ask me questions about your workplace rights"}
+                  Ask me questions about Romanian workplace rights and labor law
                 </p>
                 <div className="flex flex-wrap gap-2 justify-center">
-                  {quickQuestions.map((question, idx) => (
+                  {QUICK_QUESTIONS.map((question, idx) => (
                     <Button
                       key={idx}
                       variant="outline"
@@ -434,7 +401,7 @@ const LabourLawChat = () => {
                     <div className="whitespace-pre-wrap break-words">{message.content}</div>
                     <div className="flex items-center gap-2 mt-2">
                       <span className="text-xs opacity-70">
-                        {message.timestamp.toLocaleTimeString(language === "ro" ? "ro-RO" : "en-US", {
+                        {message.timestamp.toLocaleTimeString("en-US", {
                           hour: "2-digit",
                           minute: "2-digit"
                         })}
@@ -471,7 +438,7 @@ const LabourLawChat = () => {
                     <div className="flex items-center gap-2">
                       <Loader2 className="h-4 w-4 animate-spin" />
                       <span className="text-sm">
-                        {language === "ro" ? "Caut în legislația muncii..." : "Searching labor law..."}
+                        Searching labor law database...
                       </span>
                     </div>
                   </div>
@@ -485,7 +452,7 @@ const LabourLawChat = () => {
         {messages.length > 0 && (
           <div className="px-4 py-2 border-t bg-muted/30">
             <div className="flex flex-wrap gap-2">
-              {quickQuestions.map((question, idx) => (
+              {QUICK_QUESTIONS.map((question, idx) => (
                 <Button
                   key={idx}
                   variant="ghost"
@@ -515,7 +482,7 @@ const LabourLawChat = () => {
               size="icon"
               onClick={toggleListening}
               disabled={isLoading || !speechSupported}
-              title={language === "ro" ? "Înregistrare vocală" : "Voice input"}
+              title="Voice input"
             >
               {isListening ? (
                 <MicOff className="h-4 w-4 animate-pulse" />
@@ -528,11 +495,7 @@ const LabourLawChat = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder={
-                language === "ro"
-                  ? "Întrebați despre concedii, tichete de masă, ore suplimentare..."
-                  : "Ask about medical leave, meal vouchers, overtime..."
-              }
+              placeholder="Ask about vacation days, meal vouchers, overtime, medical leave..."
               disabled={isLoading}
               className="flex-1"
             />
@@ -554,7 +517,7 @@ const LabourLawChat = () => {
                 variant="outline"
                 size="icon"
                 onClick={clearConversation}
-                title={language === "ro" ? "Șterge conversația" : "Clear conversation"}
+                title="Clear conversation"
               >
                 <Trash2 className="h-4 w-4" />
               </Button>
@@ -562,11 +525,7 @@ const LabourLawChat = () => {
           </div>
 
           <div className="mt-2 text-xs text-muted-foreground text-center">
-            {language === "ro" ? (
-              <>Data actualizată: Octombrie 2025 | Nu înlocuiește sfatul juridic profesional</>
-            ) : (
-              <>Data current as of October 2025 | Not a substitute for professional legal advice</>
-            )}
+            Data current as of October 2025 | Not a substitute for professional legal advice
           </div>
         </div>
       </CardContent>
