@@ -203,6 +203,14 @@ Range: ${Math.min(...marketData.map(d => Number(d.gross_salary)))} - ${Math.max(
 
     const analysis = JSON.parse(toolCall.function.arguments);
 
+    // Calculate min/max from market data
+    const minSalary = marketData && marketData.length > 0 
+      ? Math.min(...marketData.map(d => Number(d.gross_salary)))
+      : userCompData.gross_salary;
+    const maxSalary = marketData && marketData.length > 0 
+      ? Math.max(...marketData.map(d => Number(d.gross_salary)))
+      : userCompData.gross_salary;
+
     return new Response(JSON.stringify({ 
       analysis,
       userData: {
@@ -211,7 +219,11 @@ Range: ${Math.min(...marketData.map(d => Number(d.gross_salary)))} - ${Math.max(
         jobTitle: userCompData.job_title,
         city: userCompData.city
       },
-      dataPoints: marketData?.length || 0
+      dataPoints: marketData?.length || 0,
+      salaryRange: {
+        min: minSalary,
+        max: maxSalary
+      }
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

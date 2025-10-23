@@ -36,6 +36,7 @@ const MarketAnalysis = () => {
   const [analysis, setAnalysis] = useState<AnalysisData | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [dataPoints, setDataPoints] = useState<number>(0);
+  const [salaryRange, setSalaryRange] = useState<{ min: number; max: number } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -67,6 +68,7 @@ const MarketAnalysis = () => {
       setAnalysis(data.analysis);
       setUserData(data.userData);
       setDataPoints(data.dataPoints || 0);
+      setSalaryRange(data.salaryRange || null);
       toast({
         title: "Analysis Complete",
         description: "Your personalized market analysis is ready",
@@ -167,8 +169,20 @@ const MarketAnalysis = () => {
                   </div>
                 </div>
                 
+                {/* Salary range labels */}
+                {salaryRange && (
+                  <div className="flex justify-between text-xs text-muted-foreground pt-1">
+                    <span className="font-medium">
+                      Min: {formatSalary(salaryRange.min)} RON
+                    </span>
+                    <span className="font-medium">
+                      Max: {formatSalary(salaryRange.max)} RON
+                    </span>
+                  </div>
+                )}
+                
                 {/* Quartile labels */}
-                <div className="flex justify-between text-xs text-muted-foreground pt-1">
+                <div className="flex justify-between text-xs text-muted-foreground">
                   <span className={analysis.percentile <= 25 ? 'font-semibold text-foreground' : ''}>
                     Bottom 25%
                   </span>
