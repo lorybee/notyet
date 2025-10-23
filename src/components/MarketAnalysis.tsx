@@ -37,6 +37,7 @@ const MarketAnalysis = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [dataPoints, setDataPoints] = useState<number>(0);
   const [salaryRange, setSalaryRange] = useState<{ min: number; max: number; median: number } | null>(null);
+  const [experienceLevel, setExperienceLevel] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -69,6 +70,7 @@ const MarketAnalysis = () => {
       setUserData(data.userData);
       setDataPoints(data.dataPoints || 0);
       setSalaryRange(data.salaryRange || null);
+      setExperienceLevel(data.experienceLevel || '');
       toast({
         title: "Analysis Complete",
         description: "Your personalized market analysis is ready",
@@ -424,14 +426,14 @@ const MarketAnalysis = () => {
           <Card className="bg-muted/30">
             <CardContent className="p-4">
               <p className="text-sm text-center">
-                <span className="font-semibold">Data Source:</span> Based on {dataPoints} professionals in {userData.city}
+                <span className="font-semibold">Data Source:</span> Based on {dataPoints} {experienceLevel} professionals in {userData.city}
                 {' • '}
                 <span className="text-muted-foreground">
                   Analysis generated {new Date().toLocaleDateString('ro-RO')}
                 </span>
               </p>
               <p className="text-xs text-muted-foreground text-center mt-2">
-                💡 This analysis uses real compensation data submitted by users in your city
+                💡 This analysis uses real compensation data from {experienceLevel}-level professionals in your city
               </p>
             </CardContent>
           </Card>
