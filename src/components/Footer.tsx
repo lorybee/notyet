@@ -41,7 +41,8 @@ export const Footer = () => {
         </div>
         
         <div className="text-center text-sm text-muted-foreground space-y-2 pt-8 border-t border-border/50">
-          <p>© 2025 BenchRight. Open source under AGPL-3.0. Data hosted in the EU (Frankfurt region).</p>
+          <p>© 2025 BenchRight – Clear Pay+ | Built for transparency and fairness.</p>
+          <p>Source available for hackathon evaluation. All rights reserved.</p>
           <p>Developed by Team EmpowerAI – KnowYourRights</p>
         </div>
       </div>
