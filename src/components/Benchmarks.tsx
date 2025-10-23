@@ -441,9 +441,13 @@ export const Benchmarks = () => {
     return COLORS.warning;
   };
 
-  const minSalary = Math.min(...salaryDistGross.flatMap(d => [d.min]));
-  const maxSalary = Math.max(...salaryDistGross.flatMap(d => [d.max]));
-  const userPosition = ((userProfile.gross_salary - minSalary) / (maxSalary - minSalary)) * 100;
+  // Get salary range for user's experience level only
+  const userLevelData = salaryDistGross.find(d => d.experience_level === userProfile.experience_level);
+  const minSalary = userLevelData?.min || 0;
+  const maxSalary = userLevelData?.max || 0;
+  const userPosition = maxSalary > minSalary 
+    ? ((userProfile.gross_salary - minSalary) / (maxSalary - minSalary)) * 100 
+    : 50;
 
   return (
     <div className="space-y-8">
