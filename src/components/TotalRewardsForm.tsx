@@ -7,6 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 
 export const TotalRewardsForm = () => {
   const { toast } = useToast();
@@ -17,14 +18,14 @@ export const TotalRewardsForm = () => {
   const [formData, setFormData] = useState({
     jobTitle: "",
     jobFamily: "",
-    experienceLevel: "",
-    companySize: "",
+    experienceLevel: "" as Database['public']['Enums']['experience_level_enum'] | "",
+    companySize: "" as Database['public']['Enums']['company_size_enum'] | "",
     industry: "",
     country: "Romania",
     city: "",
-    contractType: "permanent",
-    schedule: "full-time",
-    workModel: "hybrid",
+    contractType: null as Database['public']['Enums']['contract_type_enum'] | null,
+    schedule: null as Database['public']['Enums']['schedule_enum'] | null,
+    workModel: null as Database['public']['Enums']['work_model_enum'] | null,
     grossSalary: "",
     netSalary: "",
     tenureYears: "",
@@ -74,9 +75,9 @@ export const TotalRewardsForm = () => {
               industry: existingComp.industry || "",
               country: existingComp.country || "Romania",
               city: existingComp.city || "",
-              contractType: existingComp.contract_type || "permanent",
-              schedule: existingComp.schedule || "full-time",
-              workModel: existingComp.work_model || "hybrid",
+              contractType: existingComp.contract_type || null,
+              schedule: existingComp.schedule || null,
+              workModel: existingComp.work_model || null,
               grossSalary: existingComp.gross_salary?.toString() || "",
               netSalary: existingComp.net_salary?.toString() || "",
               tenureYears: existingComp.tenure_years?.toString() || "",
@@ -189,8 +190,8 @@ export const TotalRewardsForm = () => {
         if (error) throw error;
       } else {
         // Insert new record with anonymous ID
-        const { error } = await supabase.from("compensation_data").insert({
-          anonymous_id: profile.anonymous_compensation_id, // Use anonymous ID
+        const { error } = await supabase.from("compensation_data").insert([{
+          anonymous_id: profile.anonymous_compensation_id,
           job_title: formData.jobTitle,
           experience_level: formData.experienceLevel,
           company_size: formData.companySize,
@@ -208,7 +209,7 @@ export const TotalRewardsForm = () => {
           meal_vouchers_value: formData.mealVouchersValue ? parseFloat(formData.mealVouchersValue) : null,
           has_health_insurance: formData.hasHealthInsurance,
           has_life_insurance: formData.hasLifeInsurance,
-        });
+        }]);
 
         if (error) throw error;
       }
@@ -329,17 +330,17 @@ export const TotalRewardsForm = () => {
             <Label htmlFor="experienceLevel">Experience Level *</Label>
             <Select
               value={formData.experienceLevel}
-              onValueChange={(value) => setFormData({ ...formData, experienceLevel: value })}
+              onValueChange={(value) => setFormData({ ...formData, experienceLevel: value as Database['public']['Enums']['experience_level_enum'] })}
               required
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select level" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="junior">Junior (0-2 years)</SelectItem>
-                <SelectItem value="mid">Mid (2-5 years)</SelectItem>
-                <SelectItem value="senior">Senior (5-10 years)</SelectItem>
-                <SelectItem value="lead">Lead (10+ years)</SelectItem>
+                <SelectItem value="Entry Level (0-2 years)">Entry Level (0-2 years)</SelectItem>
+                <SelectItem value="Junior (2-5 years)">Junior (2-5 years)</SelectItem>
+                <SelectItem value="Mid-Level (5-10 years)">Mid-Level (5-10 years)</SelectItem>
+                <SelectItem value="Senior (10+ years)">Senior (10+ years)</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -370,7 +371,7 @@ export const TotalRewardsForm = () => {
             <Label htmlFor="companySize">Company Size *</Label>
             <Select
               value={formData.companySize}
-              onValueChange={(value) => setFormData({ ...formData, companySize: value })}
+              onValueChange={(value) => setFormData({ ...formData, companySize: value as Database['public']['Enums']['company_size_enum'] })}
               required
             >
               <SelectTrigger>
@@ -431,17 +432,18 @@ export const TotalRewardsForm = () => {
           <div className="space-y-2">
             <Label htmlFor="contractType">Contract Type *</Label>
             <Select
-              value={formData.contractType}
-              onValueChange={(value) => setFormData({ ...formData, contractType: value })}
+              value={formData.contractType || ""}
+              onValueChange={(value) => setFormData({ ...formData, contractType: value as Database['public']['Enums']['contract_type_enum'] })}
               required
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select contract type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="permanent">Permanent</SelectItem>
-                <SelectItem value="fixed-term">Fixed-term</SelectItem>
-                <SelectItem value="contractor">Contractor</SelectItem>
+                <SelectItem value="Full-time">Full-time</SelectItem>
+                <SelectItem value="Part-time">Part-time</SelectItem>
+                <SelectItem value="Contract">Contract</SelectItem>
+                <SelectItem value="Freelance">Freelance</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -449,16 +451,16 @@ export const TotalRewardsForm = () => {
           <div className="space-y-2">
             <Label htmlFor="workModel">Work Model</Label>
             <Select
-              value={formData.workModel}
-              onValueChange={(value) => setFormData({ ...formData, workModel: value })}
+              value={formData.workModel || ""}
+              onValueChange={(value) => setFormData({ ...formData, workModel: value as Database['public']['Enums']['work_model_enum'] })}
             >
               <SelectTrigger>
-                <SelectValue />
+                <SelectValue placeholder="Select work model" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="remote">Remote</SelectItem>
-                <SelectItem value="hybrid">Hybrid</SelectItem>
-                <SelectItem value="onsite">On-site</SelectItem>
+                <SelectItem value="Remote">Remote</SelectItem>
+                <SelectItem value="Hybrid">Hybrid</SelectItem>
+                <SelectItem value="On-site">On-site</SelectItem>
               </SelectContent>
             </Select>
           </div>
