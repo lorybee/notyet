@@ -203,15 +203,25 @@ Range: ${Math.min(...marketData.map(d => Number(d.gross_salary)))} - ${Math.max(
 
     const analysis = JSON.parse(toolCall.function.arguments);
 
-    // Calculate min/max from market data
+    // Calculate min/max/median from market data
     const minSalary = marketData && marketData.length > 0 
       ? Math.min(...marketData.map(d => Number(d.gross_salary)))
       : userCompData.gross_salary;
     const maxSalary = marketData && marketData.length > 0 
       ? Math.max(...marketData.map(d => Number(d.gross_salary)))
       : userCompData.gross_salary;
+    
+    // Calculate median
+    let medianSalary = userCompData.gross_salary;
+    if (marketData && marketData.length > 0) {
+      const sortedSalaries = marketData.map(d => Number(d.gross_salary)).sort((a, b) => a - b);
+      const mid = Math.floor(sortedSalaries.length / 2);
+      medianSalary = sortedSalaries.length % 2 === 0
+        ? (sortedSalaries[mid - 1] + sortedSalaries[mid]) / 2
+        : sortedSalaries[mid];
+    }
 
-    console.log('Salary range for', userCompData.city, ':', { min: minSalary, max: maxSalary, dataPoints: marketData?.length });
+    console.log('Salary range for', userCompData.city, ':', { min: minSalary, max: maxSalary, median: medianSalary, dataPoints: marketData?.length });
 
     return new Response(JSON.stringify({ 
       analysis,
@@ -224,7 +234,8 @@ Range: ${Math.min(...marketData.map(d => Number(d.gross_salary)))} - ${Math.max(
       dataPoints: marketData?.length || 0,
       salaryRange: {
         min: minSalary,
-        max: maxSalary
+        max: maxSalary,
+        median: medianSalary
       }
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

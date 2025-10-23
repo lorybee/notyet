@@ -36,7 +36,7 @@ const MarketAnalysis = () => {
   const [analysis, setAnalysis] = useState<AnalysisData | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [dataPoints, setDataPoints] = useState<number>(0);
-  const [salaryRange, setSalaryRange] = useState<{ min: number; max: number } | null>(null);
+  const [salaryRange, setSalaryRange] = useState<{ min: number; max: number; median: number } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -151,9 +151,12 @@ const MarketAnalysis = () => {
                 
                 {/* Salary range at top */}
                 {salaryRange && (
-                  <div className="flex justify-between text-xs font-medium">
+                  <div className="flex justify-between items-center text-xs font-medium">
                     <span className="text-muted-foreground">
                       Min: <span className="text-foreground">{formatSalary(salaryRange.min)} RON</span>
+                    </span>
+                    <span className="text-muted-foreground">
+                      Median: <span className="text-foreground font-semibold">{formatSalary(salaryRange.median)} RON</span>
                     </span>
                     <span className="text-muted-foreground">
                       Max: <span className="text-foreground">{formatSalary(salaryRange.max)} RON</span>
@@ -174,6 +177,21 @@ const MarketAnalysis = () => {
                     </div>
                   </div>
                   
+                  {/* Median marker */}
+                  {salaryRange && userData && (
+                    <div 
+                      className="absolute top-0 h-3 flex items-center z-5" 
+                      style={{ 
+                        left: `${((salaryRange.median - salaryRange.min) / (salaryRange.max - salaryRange.min)) * 100}%` 
+                      }}
+                    >
+                      <div className="w-px h-6 bg-orange-500 -translate-x-1/2" />
+                      <div className="absolute top-6 text-xs text-orange-600 font-medium whitespace-nowrap -translate-x-1/2">
+                        Median
+                      </div>
+                    </div>
+                  )}
+                  
                   {/* Quartile markers */}
                   <div className="absolute top-0 left-0 right-0 h-3 flex">
                     <div className="absolute left-[25%] top-0 bottom-0 w-px bg-background/60" />
@@ -183,7 +201,7 @@ const MarketAnalysis = () => {
                 </div>
                 
                 {/* Quartile labels */}
-                <div className="flex justify-between text-xs text-muted-foreground -mt-1">
+                <div className="flex justify-between text-xs text-muted-foreground mt-8">
                   <span className={analysis.percentile <= 25 ? 'font-semibold text-foreground' : ''}>
                     Bottom 25%
                   </span>
@@ -202,7 +220,7 @@ const MarketAnalysis = () => {
           </Card>
 
           {/* 2. SALARY SNAPSHOT */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Your Salary</CardTitle>
@@ -219,6 +237,35 @@ const MarketAnalysis = () => {
                 <div>
                   <p className="text-sm text-muted-foreground">Take-home</p>
                   <p className="text-lg">{takeHomePercentage}%</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Market Median</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div>
+                  <p className="text-sm text-muted-foreground">Gross</p>
+                  <p className="text-2xl font-bold text-orange-600">{salaryRange ? formatSalary(salaryRange.median) : '-'} RON</p>
+                </div>
+                <div className="flex items-center gap-2 mt-4">
+                  {salaryRange && userData.grossSalary > salaryRange.median ? (
+                    <>
+                      <ArrowUpRight className="h-5 w-5 text-green-600" />
+                      <span className="text-green-600 font-semibold">
+                        +{formatSalary(userData.grossSalary - salaryRange.median)} RON
+                      </span>
+                    </>
+                  ) : salaryRange ? (
+                    <>
+                      <ArrowDownRight className="h-5 w-5 text-red-600" />
+                      <span className="text-red-600 font-semibold">
+                        {formatSalary(userData.grossSalary - salaryRange.median)} RON
+                      </span>
+                    </>
+                  ) : null}
                 </div>
               </CardContent>
             </Card>
