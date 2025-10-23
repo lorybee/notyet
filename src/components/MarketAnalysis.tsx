@@ -151,12 +151,9 @@ const MarketAnalysis = () => {
                 
                 {/* Salary range at top */}
                 {salaryRange && (
-                  <div className="flex justify-between items-center text-xs font-medium">
+                  <div className="flex justify-between text-xs font-medium">
                     <span className="text-muted-foreground">
                       Min: <span className="text-foreground">{formatSalary(salaryRange.min)} RON</span>
-                    </span>
-                    <span className="text-muted-foreground">
-                      Median: <span className="text-foreground font-semibold">{formatSalary(salaryRange.median)} RON</span>
                     </span>
                     <span className="text-muted-foreground">
                       Max: <span className="text-foreground">{formatSalary(salaryRange.max)} RON</span>
@@ -177,21 +174,6 @@ const MarketAnalysis = () => {
                     </div>
                   </div>
                   
-                  {/* Median marker */}
-                  {salaryRange && userData && (
-                    <div 
-                      className="absolute top-0 h-3 flex items-center z-5" 
-                      style={{ 
-                        left: `${((salaryRange.median - salaryRange.min) / (salaryRange.max - salaryRange.min)) * 100}%` 
-                      }}
-                    >
-                      <div className="w-px h-6 bg-orange-500 -translate-x-1/2" />
-                      <div className="absolute top-6 text-xs text-orange-600 font-medium whitespace-nowrap -translate-x-1/2">
-                        Median
-                      </div>
-                    </div>
-                  )}
-                  
                   {/* Quartile markers */}
                   <div className="absolute top-0 left-0 right-0 h-3 flex">
                     <div className="absolute left-[25%] top-0 bottom-0 w-px bg-background/60" />
@@ -201,7 +183,7 @@ const MarketAnalysis = () => {
                 </div>
                 
                 {/* Quartile labels */}
-                <div className="flex justify-between text-xs text-muted-foreground mt-8">
+                <div className="flex justify-between text-xs text-muted-foreground -mt-1">
                   <span className={analysis.percentile <= 25 ? 'font-semibold text-foreground' : ''}>
                     Bottom 25%
                   </span>
