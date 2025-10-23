@@ -305,13 +305,12 @@ export const Benchmarks = () => {
 
       setCompanySizeSalaries(companySizes);
 
-      // 5. BENEFITS BREAKDOWN
+      // 5. BENEFITS BREAKDOWN - Use broader filter (city + experience level)
       const benefitFilterData = cityData.filter((d: any) => 
-        d.company_size === userData.company_size && 
         d.experience_level === userData.experience_level
       );
 
-      if (benefitFilterData.length >= 3) {
+      if (benefitFilterData.length >= 2) {
         const mealCount = benefitFilterData.filter((d: any) => d.has_meal_vouchers).length;
         const healthCount = benefitFilterData.filter((d: any) => d.has_health_insurance).length;
         const lifeCount = benefitFilterData.filter((d: any) => d.has_life_insurance).length;
@@ -642,7 +641,7 @@ export const Benchmarks = () => {
       {benefitStats && (
         <Card className="p-6">
           <h3 className="text-lg font-semibold mb-6">
-            Benefits Breakdown ({userProfile.city} • {userProfile.company_size} • {userProfile.experience_level})
+            Benefits Breakdown ({userProfile.city} • {userProfile.experience_level})
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Meal Vouchers */}
