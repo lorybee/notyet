@@ -204,24 +204,32 @@ Range: ${Math.min(...marketData.map(d => Number(d.gross_salary)))} - ${Math.max(
     const analysis = JSON.parse(toolCall.function.arguments);
 
     // Calculate min/max/median from market data
-    const minSalary = marketData && marketData.length > 0 
-      ? Math.min(...marketData.map(d => Number(d.gross_salary)))
-      : userCompData.gross_salary;
-    const maxSalary = marketData && marketData.length > 0 
-      ? Math.max(...marketData.map(d => Number(d.gross_salary)))
-      : userCompData.gross_salary;
-    
-    // Calculate median
+    let minSalary = userCompData.gross_salary;
+    let maxSalary = userCompData.gross_salary;
     let medianSalary = userCompData.gross_salary;
+    
     if (marketData && marketData.length > 0) {
-      const sortedSalaries = marketData.map(d => Number(d.gross_salary)).sort((a, b) => a - b);
-      const mid = Math.floor(sortedSalaries.length / 2);
-      medianSalary = sortedSalaries.length % 2 === 0
-        ? (sortedSalaries[mid - 1] + sortedSalaries[mid]) / 2
-        : sortedSalaries[mid];
+      const salaries = marketData.map(d => Number(d.gross_salary)).filter(s => !isNaN(s));
+      
+      if (salaries.length > 0) {
+        minSalary = Math.min(...salaries);
+        maxSalary = Math.max(...salaries);
+        
+        // Calculate median
+        const sortedSalaries = [...salaries].sort((a, b) => a - b);
+        const mid = Math.floor(sortedSalaries.length / 2);
+        medianSalary = sortedSalaries.length % 2 === 0
+          ? Math.round((sortedSalaries[mid - 1] + sortedSalaries[mid]) / 2)
+          : sortedSalaries[mid];
+      }
     }
 
-    console.log('Salary range for', userCompData.city, ':', { min: minSalary, max: maxSalary, median: medianSalary, dataPoints: marketData?.length });
+    console.log('Salary range for', userCompData.city, ':', { 
+      min: minSalary, 
+      max: maxSalary, 
+      median: medianSalary,
+      dataPoints: marketData?.length 
+    });
 
     return new Response(JSON.stringify({ 
       analysis,
