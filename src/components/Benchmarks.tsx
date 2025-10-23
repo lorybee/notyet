@@ -99,8 +99,8 @@ const COLORS = {
   info: 'hsl(217, 91%, 60%)',
 };
 
-const EXP_LEVELS = ['junior', 'mid', 'senior', 'lead'];
-const COMPANY_SIZES = ['1-50', '51-200', '201-1000', '1000+'];
+const EXP_LEVELS = ['Junior (2-5 years)', 'Mid-Level (5-10 years)', 'Senior (10-15 years)', 'Lead (15+ years)'];
+const COMPANY_SIZES = ['1-50', '51-200', '201-500', '500+'];
 
 export const Benchmarks = () => {
   const { toast } = useToast();
