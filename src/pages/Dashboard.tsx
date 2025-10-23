@@ -33,6 +33,7 @@ const Dashboard = () => {
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [displayName, setDisplayName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("profile");
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -139,18 +140,20 @@ const Dashboard = () => {
                 </p>
               </div>
 
-              {/* Call to Action */}
-              <div className="flex items-start gap-3 p-4 bg-primary/10 rounded-lg border border-primary/20">
-                <span className="text-2xl">👉</span>
-                <p className="text-sm text-foreground">
-                  Start by completing your Total Rewards form — it only takes 2 minutes.
-                </p>
-              </div>
+              {/* Call to Action - Only show on profile tab */}
+              {activeTab === "profile" && (
+                <div className="flex items-start gap-3 p-4 bg-primary/10 rounded-lg border border-primary/20">
+                  <span className="text-2xl">👉</span>
+                  <p className="text-sm text-foreground">
+                    Start by completing your Total Rewards form — it only takes 2 minutes.
+                  </p>
+                </div>
+              )}
             </div>
           </Card>
 
           {/* Dashboard Tabs */}
-          <Tabs defaultValue="profile" className="w-full">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 gap-2 h-auto bg-muted/50 p-2">
               <TabsTrigger value="profile" className="flex items-center gap-2">
                 <User className="h-4 w-4" />
