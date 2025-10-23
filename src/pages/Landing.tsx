@@ -49,21 +49,21 @@ const Landing = () => {
             </h1>
           </div>
           
-          <h2 className="text-3xl md:text-5xl font-semibold leading-relaxed pt-4 space-y-2">
+          <h2 className="text-3xl md:text-5xl font-semibold pt-4 space-y-3">
             <div 
-              className="bg-clip-text text-transparent"
+              className="bg-clip-text text-transparent leading-[1.4] pb-1"
               style={{ backgroundImage: 'linear-gradient(90deg, #1D4E89, #2E8B57)' }}
             >
               Together for fair pay.
             </div>
             <div 
-              className="bg-clip-text text-transparent"
+              className="bg-clip-text text-transparent leading-[1.4] pb-1"
               style={{ backgroundImage: 'linear-gradient(90deg, #F5B700, #CC8800)' }}
             >
               Powered by data.
             </div>
             <div 
-              className="bg-clip-text text-transparent"
+              className="bg-clip-text text-transparent leading-[1.4] pb-1"
               style={{ backgroundImage: 'linear-gradient(90deg, #2E8B57, #1D4E89)' }}
             >
               Driven by people.
