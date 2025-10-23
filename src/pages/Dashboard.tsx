@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -105,7 +105,7 @@ const Dashboard = () => {
       <header className="border-b border-border/50 bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
               <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
                 <BarChart3 className="h-6 w-6 text-primary-foreground" />
               </div>
@@ -113,7 +113,7 @@ const Dashboard = () => {
                 <h1 className="text-xl font-bold text-foreground">BenchRight</h1>
                 <p className="text-xs text-muted-foreground">Clear Pay+</p>
               </div>
-            </div>
+            </Link>
             <div className="flex items-center gap-4">
               <div className="text-right hidden sm:block">
                 <p className="text-sm font-medium text-foreground">Freemium Plan</p>
