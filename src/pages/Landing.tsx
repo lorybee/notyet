@@ -38,23 +38,23 @@ const Landing = () => {
       {/* Hero Content */}
       <section className="container mx-auto px-4 py-12 text-center">
         <div className="mx-auto max-w-5xl space-y-6">
-          <div className="bg-[#3B5998] text-white py-2 px-6 rounded-t-lg inline-flex items-center gap-2 text-sm">
-            <Shield className="h-4 w-4" />
-            Anonymous & Secure
-          </div>
-          
-          <div className="bg-[#3B5998] text-white py-8 px-8 rounded-lg max-w-4xl mx-auto -mt-6">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-              BenchRight <span className="text-[#4ADE80]">Clear Pay+</span>
+          <div className="bg-[#2B5AA8] text-white py-8 px-8 rounded-lg max-w-4xl mx-auto">
+            <div className="text-sm mb-4 flex items-center justify-center gap-2">
+              <Shield className="h-4 w-4" />
+              Anonymous & Secure
+            </div>
+            <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
+              BenchRight <span className="text-[#5FD896]">Clear Pay+</span>
             </h1>
           </div>
           
-          <h2 className="text-3xl md:text-4xl font-bold leading-tight pt-6">
+          <h2 className="text-3xl md:text-5xl font-bold leading-tight pt-4">
             <span className="text-[#3B82F6]">Together </span>
-            <span className="text-[#22C55E]">for fair </span>
+            <span className="text-[#5FD896]">for fair </span>
             <span className="text-[#F97316]">pay. </span>
-            <span className="text-[#22C55E]">Powered </span>
-            <span className="text-[#6366F1]">by data. </span>
+            <span className="text-[#5FD896]">Powered </span>
+            <span className="text-[#8B7DA8]">by data. </span>
+            <br />
             <span className="text-[#F97316]">Driven </span>
             <span className="text-[#3B82F6]">by people.</span>
           </h2>
