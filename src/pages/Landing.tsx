@@ -58,15 +58,9 @@ const Landing = () => {
             </div>
             <div 
               className="bg-clip-text text-transparent leading-[1.4] pb-1"
-              style={{ backgroundImage: 'linear-gradient(90deg, #F5B700, #CC8800)' }}
+              style={{ backgroundImage: 'linear-gradient(90deg, #F5B700, #1D4E89)' }}
             >
-              Powered by data.
-            </div>
-            <div 
-              className="bg-clip-text text-transparent leading-[1.4] pb-1"
-              style={{ backgroundImage: 'linear-gradient(90deg, #2E8B57, #1D4E89)' }}
-            >
-              Driven by people.
+              Powered by data. Driven by people.
             </div>
           </h2>
           
