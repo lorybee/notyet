@@ -1,1 +1,7 @@
 project_id = "snfpurilanmjuckkwpys"
+
+[functions.labour-law-chat]
+verify_jwt = false
+
+[functions.market-analysis]
+verify_jwt = true
