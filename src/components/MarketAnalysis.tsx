@@ -143,11 +143,24 @@ const MarketAnalysis = () => {
                 </Badge>
               </div>
               
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Market Position</span>
                   <span className="font-semibold">{analysis.percentile}th percentile</span>
                 </div>
+                
+                {/* Salary range at top */}
+                {salaryRange && (
+                  <div className="flex justify-between text-xs font-medium">
+                    <span className="text-muted-foreground">
+                      Min: <span className="text-foreground">{formatSalary(salaryRange.min)} RON</span>
+                    </span>
+                    <span className="text-muted-foreground">
+                      Max: <span className="text-foreground">{formatSalary(salaryRange.max)} RON</span>
+                    </span>
+                  </div>
+                )}
+                
                 <div className="relative">
                   <Progress value={analysis.percentile} className="h-3" />
                   
@@ -169,20 +182,8 @@ const MarketAnalysis = () => {
                   </div>
                 </div>
                 
-                {/* Salary range labels */}
-                {salaryRange && (
-                  <div className="flex justify-between text-xs text-muted-foreground pt-1">
-                    <span className="font-medium">
-                      Min: {formatSalary(salaryRange.min)} RON
-                    </span>
-                    <span className="font-medium">
-                      Max: {formatSalary(salaryRange.max)} RON
-                    </span>
-                  </div>
-                )}
-                
                 {/* Quartile labels */}
-                <div className="flex justify-between text-xs text-muted-foreground">
+                <div className="flex justify-between text-xs text-muted-foreground -mt-1">
                   <span className={analysis.percentile <= 25 ? 'font-semibold text-foreground' : ''}>
                     Bottom 25%
                   </span>

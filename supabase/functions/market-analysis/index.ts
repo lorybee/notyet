@@ -211,6 +211,8 @@ Range: ${Math.min(...marketData.map(d => Number(d.gross_salary)))} - ${Math.max(
       ? Math.max(...marketData.map(d => Number(d.gross_salary)))
       : userCompData.gross_salary;
 
+    console.log('Salary range for', userCompData.city, ':', { min: minSalary, max: maxSalary, dataPoints: marketData?.length });
+
     return new Response(JSON.stringify({ 
       analysis,
       userData: {
