@@ -16,6 +16,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface ProfileSettingsFormProps {
   userId: string;
+  onDisplayNameUpdate?: (name: string) => void;
 }
 
 const ROMANIAN_CITIES = [
@@ -60,7 +61,7 @@ const INDUSTRIES = [
   "Other",
 ];
 
-export const ProfileSettingsForm = ({ userId }: ProfileSettingsFormProps) => {
+export const ProfileSettingsForm = ({ userId, onDisplayNameUpdate }: ProfileSettingsFormProps) => {
   const [displayName, setDisplayName] = useState("");
   const [city, setCity] = useState("");
   const [industry, setIndustry] = useState("");
@@ -130,6 +131,11 @@ export const ProfileSettingsForm = ({ userId }: ProfileSettingsFormProps) => {
       setOriginalData(newData);
       setHasChanges(false);
       setJustSaved(true);
+
+      // Notify parent component of display name update
+      if (onDisplayNameUpdate) {
+        onDisplayNameUpdate(displayName.trim());
+      }
 
       toast({
         title: "Profile updated",

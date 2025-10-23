@@ -50,7 +50,7 @@ const Dashboard = () => {
           .from('profiles')
           .select('display_name')
           .eq('user_id', session.user.id)
-          .single();
+          .maybeSingle();
         
         if (profile?.display_name) {
           setDisplayName(profile.display_name);
@@ -61,11 +61,24 @@ const Dashboard = () => {
     });
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === "SIGNED_OUT" || !session) {
         navigate("/auth");
       } else {
         setUser(session.user);
+        
+        // Fetch display name when user signs in
+        setTimeout(async () => {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('display_name')
+            .eq('user_id', session.user.id)
+            .maybeSingle();
+          
+          if (profile?.display_name) {
+            setDisplayName(profile.display_name);
+          }
+        }, 0);
       }
     });
 
@@ -189,7 +202,10 @@ const Dashboard = () => {
                 <p className="text-muted-foreground mb-6">
                   Set your default city and industry to prefill forms.
                 </p>
-                <ProfileSettingsForm userId={user?.id || ''} />
+                <ProfileSettingsForm 
+                  userId={user?.id || ''} 
+                  onDisplayNameUpdate={setDisplayName}
+                />
               </Card>
             </TabsContent>
 
