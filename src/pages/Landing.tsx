@@ -12,7 +12,7 @@ const Landing = () => {
       {/* Header */}
       <header className="container mx-auto px-4 py-6">
         <nav className="flex items-center justify-between">
-          <img src={benchrightLogo} alt="BenchRight Logo" className="h-12" />
+          <img src={benchrightLogo} alt="BenchRight Logo" className="h-36" />
           <div className="flex gap-3">
             <Button variant="ghost" onClick={() => navigate("/auth")}>
               Sign In
@@ -119,7 +119,7 @@ const Landing = () => {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="mb-4">
-                <img src={benchrightLogo} alt="BenchRight Logo" className="h-10" />
+                <img src={benchrightLogo} alt="BenchRight Logo" className="h-30" />
               </div>
               <p className="text-sm text-muted-foreground">
                 Together for fair pay. Powered by data. Driven by people.

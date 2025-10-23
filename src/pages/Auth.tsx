@@ -108,7 +108,7 @@ const Auth = () => {
           </Button>
           
           <div className="flex items-center justify-center">
-            <img src={benchrightLogo} alt="BenchRight Logo" className="h-16" />
+            <img src={benchrightLogo} alt="BenchRight Logo" className="h-48" />
           </div>
           
           <p className="text-muted-foreground">

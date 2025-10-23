@@ -107,7 +107,7 @@ const Dashboard = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-              <img src={benchrightLogo} alt="BenchRight Logo" className="h-12" />
+              <img src={benchrightLogo} alt="BenchRight Logo" className="h-36" />
             </Link>
             <div className="flex items-center gap-4">
               <div className="text-right hidden sm:block">
