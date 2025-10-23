@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { TotalRewardsForm } from "@/components/TotalRewardsForm";
 import { 
   BarChart3, 
   User, 
@@ -165,25 +166,15 @@ const Dashboard = () => {
             </TabsContent>
 
             <TabsContent value="rewards" className="mt-6">
-              <Card className="p-6">
-                <h3 className="text-xl font-semibold mb-4 text-foreground">Total Rewards Input</h3>
-                <p className="text-muted-foreground mb-6">
-                  Enter your compensation details to compare with market benchmarks.
-                </p>
-                <div className="p-8 bg-muted/50 rounded-lg text-center">
-                  <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <div className="max-w-4xl mx-auto">
+                <div className="mb-6">
+                  <h2 className="text-2xl font-bold mb-2">Total Rewards Calculator</h2>
                   <p className="text-muted-foreground">
-                    Compensation input form coming soon. This will include fields for:
+                    Submit your compensation data anonymously to contribute to market insights and access personalized benchmarks.
                   </p>
-                  <ul className="text-sm text-muted-foreground mt-4 space-y-2 text-left max-w-md mx-auto">
-                    <li>• Job title, industry, company size</li>
-                    <li>• Gross and net salary</li>
-                    <li>• Experience level and tenure</li>
-                    <li>• Benefits (meal vouchers, insurance, leave days)</li>
-                    <li>• Work model (on-site, hybrid, remote)</li>
-                  </ul>
                 </div>
-              </Card>
+                <TotalRewardsForm />
+              </div>
             </TabsContent>
 
             <TabsContent value="benchmarks" className="mt-6">
