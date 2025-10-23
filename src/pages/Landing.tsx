@@ -10,153 +10,187 @@ const Landing = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
       {/* Header */}
-      <header className="container mx-auto px-4 py-6">
-        <nav className="flex items-center justify-between">
-          <img src={benchrightLogo} alt="BenchRight Logo" className="h-36" />
-          <div className="flex gap-3">
-            <Button variant="ghost" onClick={() => navigate("/auth")}>
-              Sign In
-            </Button>
-            <Button onClick={() => navigate("/auth")}>
-              Get Started
-            </Button>
-          </div>
-        </nav>
+      <header className="bg-muted/30 border-b border-border/50">
+        <div className="container mx-auto px-4 py-4">
+          <nav className="flex items-center justify-between">
+            <img src={benchrightLogo} alt="BenchRight Logo" className="h-16" />
+            <div className="flex items-center gap-6">
+              <Button variant="ghost" className="text-base">
+                Features
+              </Button>
+              <Button variant="ghost" className="text-base">
+                Pricing
+              </Button>
+              <Button variant="ghost" className="text-base">
+                About
+              </Button>
+              <Button variant="ghost" onClick={() => navigate("/auth")} className="text-base">
+                Sign In
+              </Button>
+              <Button onClick={() => navigate("/auth")} size="lg" className="text-base">
+                Get Started
+              </Button>
+            </div>
+          </nav>
+        </div>
       </header>
 
       {/* Hero Content */}
-      <section className="container mx-auto px-4 py-16 text-center">
-        <div className="mx-auto max-w-4xl space-y-8">
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight">
-            <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-              Together for fair pay.
-            </span>{" "}
-            <span className="bg-gradient-to-r from-secondary via-accent to-primary bg-clip-text text-transparent">
-              Powered by data.
-            </span>{" "}
-            <span className="bg-gradient-to-r from-accent via-primary to-secondary bg-clip-text text-transparent">
-              Driven by people.
-            </span>
+      <section className="container mx-auto px-4 py-12 text-center">
+        <div className="mx-auto max-w-5xl space-y-6">
+          <div className="bg-primary text-primary-foreground py-3 px-6 rounded-lg inline-flex items-center gap-2 text-sm">
+            <Shield className="h-4 w-4" />
+            Anonymous & Secure
+          </div>
+          
+          <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
+            BenchRight <span className="text-green-500">Clear Pay+</span>
+          </h1>
+          
+          <h2 className="text-3xl md:text-4xl font-bold leading-tight">
+            <span className="text-blue-600">Together</span>{" "}
+            <span className="text-green-600">for fair pay.</span>{" "}
+            <span className="text-orange-500">Powered by data.</span>{" "}
+            <span className="text-blue-600">Driven by people.</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Transparent salary benchmarking for Romanian employees. Know your worth, understand the market.
-          </p>
+          
+          <div className="bg-primary text-primary-foreground py-4 px-8 rounded-lg max-w-3xl mx-auto">
+            <p className="text-xl font-semibold">
+              Transparent compensation benchmarking for Romania's workforce
+            </p>
+          </div>
+          
+          <div className="bg-primary text-primary-foreground py-6 px-8 rounded-lg max-w-3xl mx-auto">
+            <p className="text-base">
+              Compare real salaries, understand purchasing power, and know your rights—all powered by anonymized data and AI insights.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Features Cards */}
+      {/* User Type Selection */}
       <section className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <Card className="p-8 text-center hover:shadow-xl transition-all duration-300 border-2 border-primary bg-card">
+            <div className="h-20 w-20 rounded-full bg-primary flex items-center justify-center mb-4 mx-auto">
+              <Users className="h-10 w-10 text-primary-foreground" />
+            </div>
+            <h4 className="text-xl font-bold mb-3 text-foreground">Employee</h4>
+            <p className="text-muted-foreground mb-6 text-sm">
+              See where your salary stands and what benefits you deserve
+            </p>
+            <Button onClick={() => navigate("/auth")} className="w-full">
+              Continue as Employee
+            </Button>
+          </Card>
+
+          <Card className="p-8 text-center hover:shadow-xl transition-all duration-300 border-border/50 bg-card opacity-75">
+            <div className="h-20 w-20 rounded-full bg-muted flex items-center justify-center mb-4 mx-auto">
+              <BarChart3 className="h-10 w-10 text-muted-foreground" />
+            </div>
+            <h4 className="text-xl font-bold mb-3 text-foreground">Employer</h4>
+            <p className="text-muted-foreground mb-6 text-sm">
+              Benchmark fair pay and build trust with your team
+            </p>
+            <Button variant="outline" disabled className="w-full">
+              Coming Soon
+            </Button>
+          </Card>
+
+          <Card className="p-8 text-center hover:shadow-xl transition-all duration-300 border-border/50 bg-card opacity-75">
+            <div className="h-20 w-20 rounded-full bg-muted flex items-center justify-center mb-4 mx-auto">
+              <Users className="h-10 w-10 text-muted-foreground" />
+            </div>
+            <h4 className="text-xl font-bold mb-3 text-foreground">Social Partners</h4>
+            <p className="text-muted-foreground mb-6 text-sm">
+              Track workforce trends and pay equity data
+            </p>
+            <Button variant="outline" disabled className="w-full">
+              Coming Soon
+            </Button>
+          </Card>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="container mx-auto px-4 py-16 bg-muted/20">
+        <div className="max-w-5xl mx-auto text-center mb-12">
+          <h3 className="text-3xl md:text-4xl font-bold mb-4">
+            Everything You Need to Make Informed Decisions
+          </h3>
+          <p className="text-muted-foreground text-lg">
+            Comprehensive tools to understand your compensation, compare opportunities, and know your workplace rights.
+          </p>
+        </div>
+        
+        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           <Card className="p-8 text-center hover:shadow-xl transition-all duration-300 border-border/50 backdrop-blur-sm">
-            <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 mx-auto">
-              <BarChart3 className="h-8 w-8 text-primary" />
+            <div className="h-16 w-16 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-4 mx-auto">
+              <BarChart3 className="h-8 w-8 text-blue-600 dark:text-blue-400" />
             </div>
             <h4 className="text-xl font-semibold mb-3 text-foreground">Data-Driven</h4>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Anonymous compensation data aggregated for accurate market insights
             </p>
           </Card>
 
           <Card className="p-8 text-center hover:shadow-xl transition-all duration-300 border-border/50 backdrop-blur-sm">
-            <div className="h-16 w-16 rounded-full bg-secondary/10 flex items-center justify-center mb-4 mx-auto">
-              <Users className="h-8 w-8 text-secondary" />
+            <div className="h-16 w-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mb-4 mx-auto">
+              <Users className="h-8 w-8 text-green-600 dark:text-green-400" />
             </div>
             <h4 className="text-xl font-semibold mb-3 text-foreground">People-Powered</h4>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Built by employees, for employees seeking pay transparency
             </p>
           </Card>
 
           <Card className="p-8 text-center hover:shadow-xl transition-all duration-300 border-border/50 backdrop-blur-sm">
-            <div className="h-16 w-16 rounded-full bg-accent/10 flex items-center justify-center mb-4 mx-auto">
-              <Shield className="h-8 w-8 text-accent" />
+            <div className="h-16 w-16 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center mb-4 mx-auto">
+              <Shield className="h-8 w-8 text-orange-600 dark:text-orange-400" />
             </div>
             <h4 className="text-xl font-semibold mb-3 text-foreground">Fair Pay</h4>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Compare compensation and understand your rights under Romanian law
             </p>
           </Card>
         </div>
       </section>
 
-      {/* User Type Selection */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="max-w-3xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-4">
-            <Button 
-              size="lg" 
-              onClick={() => navigate("/auth")} 
-              className="h-16 text-lg"
-            >
-              Employee
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="h-16 text-lg"
-              disabled
-            >
-              Employer
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="h-16 text-lg"
-              disabled
-            >
-              Government/Policymakers
-            </Button>
-          </div>
-          <p className="text-center text-sm text-muted-foreground mt-6">
-            Start by creating an employee account to contribute your data and view market benchmarks
-          </p>
-        </div>
-      </section>
-
       {/* Footer */}
       <footer className="border-t border-border/50 py-12 bg-muted/30">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="mb-4">
-                <img src={benchrightLogo} alt="BenchRight Logo" className="h-30" />
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Together for fair pay. Powered by data. Driven by people.
-              </p>
-            </div>
-            
+          <div className="grid md:grid-cols-3 gap-12 max-w-4xl mx-auto mb-8">
             <div>
               <h5 className="font-semibold text-foreground mb-4">Product</h5>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>Features</li>
-                <li>Pricing</li>
-                <li>Security</li>
+                <li className="hover:text-foreground cursor-pointer transition-colors">Features</li>
+                <li className="hover:text-foreground cursor-pointer transition-colors">Pricing</li>
+                <li className="hover:text-foreground cursor-pointer transition-colors">Security</li>
               </ul>
             </div>
 
             <div>
               <h5 className="font-semibold text-foreground mb-4">Resources</h5>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>Knowledge Base</li>
-                <li>Labour Law Guide</li>
-                <li>Salary Reports</li>
+                <li className="hover:text-foreground cursor-pointer transition-colors">Knowledge Base</li>
+                <li className="hover:text-foreground cursor-pointer transition-colors">Labour Law Guide</li>
+                <li className="hover:text-foreground cursor-pointer transition-colors">Salary Reports</li>
               </ul>
             </div>
 
             <div>
               <h5 className="font-semibold text-foreground mb-4">Legal</h5>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>Privacy Policy</li>
-                <li>Terms of Service</li>
-                <li>AGPL-3.0 License</li>
+                <li className="hover:text-foreground cursor-pointer transition-colors">Privacy Policy</li>
+                <li className="hover:text-foreground cursor-pointer transition-colors">Terms of Service</li>
+                <li className="hover:text-foreground cursor-pointer transition-colors">AGPL-3.0 License</li>
               </ul>
             </div>
           </div>
           
-          <div className="mt-12 pt-8 border-t border-border/50 text-center text-sm text-muted-foreground">
+          <div className="text-center text-sm text-muted-foreground space-y-2 pt-8 border-t border-border/50">
             <p>© 2025 BenchRight. Open source under AGPL-3.0. Data hosted in the EU (Frankfurt region).</p>
-            <p className="mt-2">Developed by Team EmpowerAI – KnowYourRights</p>
+            <p>Developed by Team EmpowerAI – KnowYourRights</p>
           </div>
         </div>
       </footer>
