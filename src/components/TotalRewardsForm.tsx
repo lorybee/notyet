@@ -12,6 +12,8 @@ export const TotalRewardsForm = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);
+  const [needsDisplayName, setNeedsDisplayName] = useState(false);
+  const [displayName, setDisplayName] = useState("");
   const [formData, setFormData] = useState({
     jobTitle: "",
     jobFamily: "",
@@ -40,33 +42,51 @@ export const TotalRewardsForm = () => {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
 
-        const { data: existingComp } = await supabase
-          .from("compensation_data")
-          .select("*")
-          .eq("anonymous_id", user.id)
-          .maybeSingle();
+        // Check if user has a profile with display name
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("display_name, anonymous_compensation_id")
+          .eq("user_id", user.id)
+          .single();
 
-        if (existingComp) {
-          setFormData({
-            jobTitle: existingComp.job_title || "",
-            jobFamily: "", // Not stored in DB yet
-            experienceLevel: existingComp.experience_level || "",
-            companySize: existingComp.company_size || "",
-            industry: existingComp.industry || "",
-            country: existingComp.country || "Romania",
-            city: existingComp.city || "",
-            contractType: existingComp.contract_type || "permanent",
-            schedule: existingComp.schedule || "full-time",
-            workModel: existingComp.work_model || "hybrid",
-            grossSalary: existingComp.gross_salary?.toString() || "",
-            netSalary: existingComp.net_salary?.toString() || "",
-            tenureYears: existingComp.tenure_years?.toString() || "",
-            paidLeaveDays: existingComp.paid_leave_days?.toString() || "",
-            hasMealVouchers: existingComp.has_meal_vouchers || false,
-            mealVouchersValue: existingComp.meal_vouchers_value?.toString() || "",
-            hasHealthInsurance: existingComp.has_health_insurance || false,
-            hasLifeInsurance: existingComp.has_life_insurance || false,
-          });
+        if (!profile?.display_name) {
+          setNeedsDisplayName(true);
+          setIsLoadingData(false);
+          return;
+        }
+
+        setDisplayName(profile.display_name);
+
+        // Load compensation data using anonymous ID
+        if (profile.anonymous_compensation_id) {
+          const { data: existingComp } = await supabase
+            .from("compensation_data")
+            .select("*")
+            .eq("anonymous_id", profile.anonymous_compensation_id)
+            .maybeSingle();
+
+          if (existingComp) {
+            setFormData({
+              jobTitle: existingComp.job_title || "",
+              jobFamily: "", // Not stored in DB yet
+              experienceLevel: existingComp.experience_level || "",
+              companySize: existingComp.company_size || "",
+              industry: existingComp.industry || "",
+              country: existingComp.country || "Romania",
+              city: existingComp.city || "",
+              contractType: existingComp.contract_type || "permanent",
+              schedule: existingComp.schedule || "full-time",
+              workModel: existingComp.work_model || "hybrid",
+              grossSalary: existingComp.gross_salary?.toString() || "",
+              netSalary: existingComp.net_salary?.toString() || "",
+              tenureYears: existingComp.tenure_years?.toString() || "",
+              paidLeaveDays: existingComp.paid_leave_days?.toString() || "",
+              hasMealVouchers: existingComp.has_meal_vouchers || false,
+              mealVouchersValue: existingComp.meal_vouchers_value?.toString() || "",
+              hasHealthInsurance: existingComp.has_health_insurance || false,
+              hasLifeInsurance: existingComp.has_life_insurance || false,
+            });
+          }
         }
       } catch (error) {
         console.error("Error loading existing data:", error);
@@ -89,11 +109,44 @@ export const TotalRewardsForm = () => {
         throw new Error("You must be logged in to submit compensation data");
       }
 
-      // First, check if user already has compensation data
+      // If display name is needed, save it first
+      if (needsDisplayName) {
+        if (!displayName.trim()) {
+          throw new Error("Please enter a display name");
+        }
+
+        const { error: profileError } = await supabase
+          .from("profiles")
+          .update({ display_name: displayName.trim() })
+          .eq("user_id", user.id);
+
+        if (profileError) {
+          if (profileError.code === '23505') { // Unique constraint violation
+            throw new Error("This display name is already taken. Please choose another one.");
+          }
+          throw profileError;
+        }
+
+        setNeedsDisplayName(false);
+      }
+
+      // Get user's anonymous compensation ID from profile
+      const { data: profile, error: profileFetchError } = await supabase
+        .from("profiles")
+        .select("anonymous_compensation_id, display_name")
+        .eq("user_id", user.id)
+        .single();
+
+      if (profileFetchError) throw profileFetchError;
+      if (!profile?.anonymous_compensation_id) {
+        throw new Error("Anonymous ID not found. Please try again.");
+      }
+
+      // Check if user already has compensation data
       const { data: existingData } = await supabase
         .from("compensation_data")
         .select("id")
-        .eq("anonymous_id", user.id)
+        .eq("anonymous_id", profile.anonymous_compensation_id)
         .maybeSingle();
 
       if (existingData) {
@@ -123,9 +176,9 @@ export const TotalRewardsForm = () => {
 
         if (error) throw error;
       } else {
-        // Insert new record with user's ID
+        // Insert new record with anonymous ID
         const { error } = await supabase.from("compensation_data").insert({
-          anonymous_id: user.id, // Link to user's account
+          anonymous_id: profile.anonymous_compensation_id, // Use anonymous ID
           job_title: formData.jobTitle,
           experience_level: formData.experienceLevel,
           company_size: formData.companySize,
@@ -159,35 +212,17 @@ export const TotalRewardsForm = () => {
 
       toast({
         title: "Success!",
-        description: existingData ? "Your compensation data has been updated." : "Your compensation data has been submitted.",
+        description: existingData 
+          ? "Your compensation data has been updated." 
+          : `Your data has been submitted anonymously as "${profile.display_name}"`,
       });
 
-      // Reset form
-      setFormData({
-        jobTitle: "",
-        jobFamily: "",
-        experienceLevel: "",
-        companySize: "",
-        industry: "",
-        country: "Romania",
-        city: "",
-        contractType: "permanent",
-        schedule: "full-time",
-        workModel: "hybrid",
-        grossSalary: "",
-        netSalary: "",
-        tenureYears: "",
-        paidLeaveDays: "",
-        hasMealVouchers: false,
-        mealVouchersValue: "",
-        hasHealthInsurance: false,
-        hasLifeInsurance: false,
-      });
-    } catch (error) {
+      // Keep form populated after successful submit - don't reset
+    } catch (error: any) {
       console.error("Error submitting compensation data:", error);
       toast({
         title: "Error",
-        description: "Failed to submit data. Please try again.",
+        description: error.message || "Failed to submit data. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -205,6 +240,39 @@ export const TotalRewardsForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {needsDisplayName && (
+        <Card className="p-6 border-primary">
+          <h3 className="text-lg font-semibold mb-2">Choose Your Display Name</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            This name will be used to identify your compensation data anonymously. 
+            Your email address will never be linked to your submitted data.
+          </p>
+          <div className="space-y-2">
+            <Label htmlFor="displayName">Display Name *</Label>
+            <Input
+              id="displayName"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              placeholder="e.g. TechPro2024"
+              required
+              maxLength={50}
+            />
+            <p className="text-xs text-muted-foreground">
+              This must be unique and cannot be changed later
+            </p>
+          </div>
+        </Card>
+      )}
+
+      {displayName && !needsDisplayName && (
+        <Card className="p-4 bg-muted/50">
+          <p className="text-sm">
+            <span className="text-muted-foreground">Submitting as:</span>{" "}
+            <span className="font-semibold">{displayName}</span>
+          </p>
+        </Card>
+      )}
+
       <Card className="p-6">
         <h3 className="text-lg font-semibold mb-4">Job Information</h3>
         <div className="grid md:grid-cols-2 gap-4">

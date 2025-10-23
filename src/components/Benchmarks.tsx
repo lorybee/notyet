@@ -144,6 +144,23 @@ export const Benchmarks = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
+      // Get user's anonymous compensation ID from profile
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("anonymous_compensation_id, city, industry")
+        .eq("user_id", user.id)
+        .single();
+
+      if (profileError) throw profileError;
+      if (!profile?.anonymous_compensation_id) {
+        toast({
+          title: "No data found",
+          description: "Please complete your compensation profile first.",
+          variant: "destructive",
+        });
+        return;
+      }
+
       // Fetch all compensation data
       const { data: allData, error: allError } = await supabase
         .from("compensation_data")
@@ -152,11 +169,11 @@ export const Benchmarks = () => {
       if (allError) throw allError;
       if (!allData || allData.length === 0) return;
 
-      // Get user's compensation data
+      // Get user's compensation data using anonymous ID
       const { data: userCompData } = await supabase
         .from("compensation_data")
         .select("*")
-        .eq("anonymous_id", user.id)
+        .eq("anonymous_id", profile.anonymous_compensation_id)
         .maybeSingle();
 
       if (!userCompData) {

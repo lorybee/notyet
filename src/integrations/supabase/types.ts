@@ -145,24 +145,30 @@ export type Database = {
       }
       profiles: {
         Row: {
+          anonymous_compensation_id: string | null
           city: string | null
           created_at: string
+          display_name: string | null
           id: string
           industry: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          anonymous_compensation_id?: string | null
           city?: string | null
           created_at?: string
+          display_name?: string | null
           id?: string
           industry?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          anonymous_compensation_id?: string | null
           city?: string | null
           created_at?: string
+          display_name?: string | null
           id?: string
           industry?: string | null
           updated_at?: string
@@ -175,7 +181,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_anonymous_id_for_user: {
+        Args: { user_uuid: string }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never
