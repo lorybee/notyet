@@ -2,9 +2,44 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import { Footer } from "@/components/Footer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useEffect, useState } from "react";
+import { Session } from "@supabase/supabase-js";
 
 const Pricing = () => {
+  const navigate = useNavigate();
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handlePlanClick = (planName: string) => {
+    if (planName === "Freemium") {
+      if (session) {
+        navigate("/dashboard");
+      } else {
+        navigate("/auth");
+      }
+    } else {
+      // For Pro and Premium plans, redirect to auth/dashboard
+      if (session) {
+        navigate("/dashboard");
+      } else {
+        navigate("/auth");
+      }
+    }
+  };
+
   const plans = [
     {
       name: "Freemium",
@@ -98,6 +133,7 @@ const Pricing = () => {
                   <Button 
                     className="w-full" 
                     variant={plan.highlighted ? "default" : "outline"}
+                    onClick={() => handlePlanClick(plan.name)}
                   >
                     {plan.cta}
                   </Button>
