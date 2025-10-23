@@ -907,32 +907,40 @@ export const Benchmarks = () => {
         </Card>
       )}
 
-      {/* 7. PREMIUM UPSELL */}
+      {/* 7. PRO UPGRADE */}
       <Card className="p-8 bg-gradient-to-br from-accent/10 to-primary/10 border-2 border-dashed">
         <div className="flex items-start gap-4">
           <Lock className="h-8 w-8 text-muted-foreground mt-1" />
           <div className="flex-1">
-            <h3 className="text-2xl font-bold mb-3">🔒 Unlock Premium Insights</h3>
+            <div className="flex items-baseline gap-2 mb-3">
+              <h3 className="text-2xl font-bold">🔒 Unlock Pro</h3>
+              <span className="text-lg font-semibold text-primary">€9.99/month</span>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">Access to Romania data</p>
             <ul className="space-y-2 mb-6">
               <li className="flex items-center gap-2 text-muted-foreground">
                 <span className="text-primary">✓</span>
-                <span>Company-specific salaries (e.g., "What Amazon pays in {userProfile.city}")</span>
+                <span>All Freemium features</span>
               </li>
               <li className="flex items-center gap-2 text-muted-foreground">
                 <span className="text-primary">✓</span>
-                <span>Personalized negotiation recommendations</span>
+                <span>Full Romania database access</span>
               </li>
               <li className="flex items-center gap-2 text-muted-foreground">
                 <span className="text-primary">✓</span>
-                <span>Skills that command premium pay in your field</span>
+                <span>Advanced analytics</span>
               </li>
               <li className="flex items-center gap-2 text-muted-foreground">
                 <span className="text-primary">✓</span>
-                <span>Job opportunities matching your profile</span>
+                <span>Export reports</span>
+              </li>
+              <li className="flex items-center gap-2 text-muted-foreground">
+                <span className="text-primary">✓</span>
+                <span>Priority support</span>
               </li>
             </ul>
             <Button size="lg" className="w-full md:w-auto">
-              Upgrade to Premium
+              Start Pro Trial
             </Button>
           </div>
         </div>
