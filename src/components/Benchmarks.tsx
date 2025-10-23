@@ -311,7 +311,7 @@ export const Benchmarks = () => {
         d.experience_level === userData.experience_level
       );
 
-      if (benefitFilterData.length >= 5) {
+      if (benefitFilterData.length >= 3) {
         const mealCount = benefitFilterData.filter((d: any) => d.has_meal_vouchers).length;
         const healthCount = benefitFilterData.filter((d: any) => d.has_health_insurance).length;
         const lifeCount = benefitFilterData.filter((d: any) => d.has_life_insurance).length;
@@ -338,7 +338,7 @@ export const Benchmarks = () => {
         d.experience_level === userData.experience_level && d.paid_leave_days
       );
 
-      if (leaveData.length >= 5) {
+      if (leaveData.length >= 3) {
         const leaveDays = leaveData.map((d: any) => Number(d.paid_leave_days)).sort((a, b) => a - b);
         const avgLeave = leaveDays.reduce((a, b) => a + b, 0) / leaveDays.length;
         const top10Index = Math.floor(leaveDays.length * 0.9);
