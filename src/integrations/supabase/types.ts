@@ -18,11 +18,13 @@ export type Database = {
         Row: {
           anonymous_id: string
           city: string
-          company_size: string
-          contract_type: string | null
+          company_size: Database["public"]["Enums"]["company_size_enum"]
+          contract_type:
+            | Database["public"]["Enums"]["contract_type_enum"]
+            | null
           country: string
           created_at: string
-          experience_level: string
+          experience_level: Database["public"]["Enums"]["experience_level_enum"]
           gross_salary: number
           has_health_insurance: boolean | null
           has_life_insurance: boolean | null
@@ -33,18 +35,20 @@ export type Database = {
           meal_vouchers_value: number | null
           net_salary: number
           paid_leave_days: number | null
-          schedule: string | null
+          schedule: Database["public"]["Enums"]["schedule_enum"] | null
           tenure_years: number | null
-          work_model: string | null
+          work_model: Database["public"]["Enums"]["work_model_enum"] | null
         }
         Insert: {
           anonymous_id?: string
           city: string
-          company_size: string
-          contract_type?: string | null
+          company_size: Database["public"]["Enums"]["company_size_enum"]
+          contract_type?:
+            | Database["public"]["Enums"]["contract_type_enum"]
+            | null
           country?: string
           created_at?: string
-          experience_level: string
+          experience_level: Database["public"]["Enums"]["experience_level_enum"]
           gross_salary: number
           has_health_insurance?: boolean | null
           has_life_insurance?: boolean | null
@@ -55,18 +59,20 @@ export type Database = {
           meal_vouchers_value?: number | null
           net_salary: number
           paid_leave_days?: number | null
-          schedule?: string | null
+          schedule?: Database["public"]["Enums"]["schedule_enum"] | null
           tenure_years?: number | null
-          work_model?: string | null
+          work_model?: Database["public"]["Enums"]["work_model_enum"] | null
         }
         Update: {
           anonymous_id?: string
           city?: string
-          company_size?: string
-          contract_type?: string | null
+          company_size?: Database["public"]["Enums"]["company_size_enum"]
+          contract_type?:
+            | Database["public"]["Enums"]["contract_type_enum"]
+            | null
           country?: string
           created_at?: string
-          experience_level?: string
+          experience_level?: Database["public"]["Enums"]["experience_level_enum"]
           gross_salary?: number
           has_health_insurance?: boolean | null
           has_life_insurance?: boolean | null
@@ -77,9 +83,9 @@ export type Database = {
           meal_vouchers_value?: number | null
           net_salary?: number
           paid_leave_days?: number | null
-          schedule?: string | null
+          schedule?: Database["public"]["Enums"]["schedule_enum"] | null
           tenure_years?: number | null
-          work_model?: string | null
+          work_model?: Database["public"]["Enums"]["work_model_enum"] | null
         }
         Relationships: []
       }
@@ -187,7 +193,15 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      company_size_enum: "1-10" | "11-50" | "51-200" | "201-500" | "500+"
+      contract_type_enum: "Full-time" | "Part-time" | "Contract" | "Freelance"
+      experience_level_enum:
+        | "Entry Level (0-2 years)"
+        | "Junior (2-5 years)"
+        | "Mid-Level (5-10 years)"
+        | "Senior (10+ years)"
+      schedule_enum: "8 hours/day" | "Flexible" | "Shift work"
+      work_model_enum: "Remote" | "Hybrid" | "On-site"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -314,6 +328,17 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      company_size_enum: ["1-10", "11-50", "51-200", "201-500", "500+"],
+      contract_type_enum: ["Full-time", "Part-time", "Contract", "Freelance"],
+      experience_level_enum: [
+        "Entry Level (0-2 years)",
+        "Junior (2-5 years)",
+        "Mid-Level (5-10 years)",
+        "Senior (10+ years)",
+      ],
+      schedule_enum: ["8 hours/day", "Flexible", "Shift work"],
+      work_model_enum: ["Remote", "Hybrid", "On-site"],
+    },
   },
 } as const
