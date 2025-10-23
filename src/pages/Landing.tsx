@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Shield, Users, BarChart3 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import benchrightLogo from "@/assets/benchright-logo.png";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -11,14 +12,7 @@ const Landing = () => {
       {/* Header */}
       <header className="container mx-auto px-4 py-6">
         <nav className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-              <BarChart3 className="h-6 w-6 text-primary-foreground" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-foreground">BenchRight – ClearPay+</h1>
-            </div>
-          </div>
+          <img src={benchrightLogo} alt="BenchRight Logo" className="h-12" />
           <div className="flex gap-3">
             <Button variant="ghost" onClick={() => navigate("/auth")}>
               Sign In
@@ -124,11 +118,8 @@ const Landing = () => {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                  <BarChart3 className="h-5 w-5 text-primary-foreground" />
-                </div>
-                <span className="font-bold text-foreground">BenchRight</span>
+              <div className="mb-4">
+                <img src={benchrightLogo} alt="BenchRight Logo" className="h-10" />
               </div>
               <p className="text-sm text-muted-foreground">
                 Together for fair pay. Powered by data. Driven by people.

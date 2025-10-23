@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import benchrightLogo from "@/assets/benchright-logo.png";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
@@ -106,14 +107,8 @@ const Auth = () => {
             Back to Home
           </Button>
           
-          <div className="flex items-center justify-center gap-3">
-            <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-              <BarChart3 className="h-7 w-7 text-primary-foreground" />
-            </div>
-            <div className="text-left">
-              <h1 className="text-2xl font-bold text-foreground">BenchRight</h1>
-              <p className="text-sm text-muted-foreground">Clear Pay+</p>
-            </div>
+          <div className="flex items-center justify-center">
+            <img src={benchrightLogo} alt="BenchRight Logo" className="h-16" />
           </div>
           
           <p className="text-muted-foreground">
