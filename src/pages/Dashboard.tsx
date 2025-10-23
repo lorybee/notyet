@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { TotalRewardsForm } from "@/components/TotalRewardsForm";
+import { Benchmarks } from "@/components/Benchmarks";
 import { 
   BarChart3, 
   User, 
@@ -178,18 +179,7 @@ const Dashboard = () => {
             </TabsContent>
 
             <TabsContent value="benchmarks" className="mt-6">
-              <Card className="p-6">
-                <h3 className="text-xl font-semibold mb-4 text-foreground">Salary Benchmarks</h3>
-                <p className="text-muted-foreground mb-6">
-                  Compare your total rewards with city and industry averages.
-                </p>
-                <div className="p-8 bg-muted/50 rounded-lg text-center">
-                  <TrendingUp className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">
-                    Enter your compensation data in the Total Rewards tab to see your benchmarks here.
-                  </p>
-                </div>
-              </Card>
+              <Benchmarks />
             </TabsContent>
 
             <TabsContent value="insights" className="mt-6">
