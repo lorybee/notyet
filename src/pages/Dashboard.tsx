@@ -133,7 +133,7 @@ const Dashboard = () => {
         <div className="max-w-6xl mx-auto space-y-6">
           {/* Welcome Card */}
           <Card className="p-8 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 border border-border/50">
-            <div className="space-y-6">
+            <div className="space-y-4">
               {/* Welcome Header */}
               <div>
                 <h2 className="text-3xl font-bold text-foreground mb-3">
@@ -150,47 +150,6 @@ const Dashboard = () => {
                 <p className="text-sm text-foreground">
                   Start by completing your Total Rewards form — it only takes 2 minutes.
                 </p>
-              </div>
-
-              {/* Trust Indicators Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                  <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
-                  <span>Anonymous by design</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                  <ShieldCheck className="h-5 w-5 text-primary flex-shrink-0" />
-                  <span>GDPR compliant (EU)</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                  <Lock className="h-5 w-5 text-primary flex-shrink-0" />
-                  <span>RLS (Row Level Security) enabled</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                  <Server className="h-5 w-5 text-primary flex-shrink-0" />
-                  <span>Hosted in EU (Frankfurt)</span>
-                </div>
-              </div>
-
-              {/* Privacy Statement */}
-              <div className="pt-4 border-t border-border/50 space-y-2">
-                <p className="text-sm text-muted-foreground">
-                  At BenchRight, we believe fair pay starts with trust — and trust starts with transparency.
-                </p>
-                <a 
-                  href="#" 
-                  className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors group"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    toast({
-                      title: "Privacy Guide",
-                      description: "Detailed privacy documentation coming soon. Your data is always encrypted and anonymous by design.",
-                    });
-                  }}
-                >
-                  How BenchRight keeps your data safe
-                  <ExternalLink className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
-                </a>
               </div>
             </div>
           </Card>
@@ -271,12 +230,50 @@ const Dashboard = () => {
             </TabsContent>
           </Tabs>
 
-          {/* Privacy Notice */}
-          <Card className="p-4 bg-primary/5 border-primary/20">
-            <p className="text-sm text-muted-foreground text-center">
-              🔒 <strong>Privacy Notice:</strong> Anonymous by design. Open algorithms. RLS secured. 
-              EU data residency (Frankfurt). Your compensation data is never linked to your account.
-            </p>
+          {/* Trust & Privacy Footer */}
+          <Card className="p-6 bg-muted/30 border-border/50">
+            <div className="space-y-4">
+              {/* Trust Indicators Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span>Anonymous by design</span>
+                </div>
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <ShieldCheck className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span>GDPR compliant (EU)</span>
+                </div>
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <Lock className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span>RLS (Row Level Security) enabled</span>
+                </div>
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <Server className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span>Hosted in EU (Frankfurt)</span>
+                </div>
+              </div>
+
+              {/* Privacy Statement */}
+              <div className="pt-3 border-t border-border/50 space-y-2">
+                <p className="text-sm text-muted-foreground">
+                  At BenchRight, we believe fair pay starts with trust — and trust starts with transparency.
+                </p>
+                <a 
+                  href="#" 
+                  className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors group"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toast({
+                      title: "Privacy Guide",
+                      description: "Detailed privacy documentation coming soon. Your data is always encrypted and anonymous by design.",
+                    });
+                  }}
+                >
+                  How BenchRight keeps your data safe
+                  <ExternalLink className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
+                </a>
+              </div>
+            </div>
           </Card>
         </div>
       </main>
