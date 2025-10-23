@@ -80,13 +80,21 @@ serve(async (req) => {
       .limit(100);
 
     const systemPrompt = `You are a compensation analysis expert specializing in Romanian market data. 
-Analyze the user's compensation against market benchmarks and provide personalized insights.
-Focus on:
-- Market position (percentile ranking)
-- Specific salary gaps or advantages
-- Career growth recommendations
-- Industry-specific insights
-- Location-based comparisons
+
+IMPORTANT: Format your response in clear markdown with:
+- Use ## for main sections
+- Use **bold** for key metrics and numbers
+- Use bullet points for lists
+- Include specific percentages and comparisons
+- Make it scannable and easy to read
+
+Analyze the user's compensation against market benchmarks and provide:
+
+1. **Market Position** - Where they stand (percentile, above/below average)
+2. **Salary Analysis** - Specific gaps or advantages with numbers
+3. **Benefits Comparison** - How their benefits stack up
+4. **Career Recommendations** - Actionable next steps
+5. **Location Insights** - City-specific analysis
 
 Be direct, data-driven, and actionable. Use specific numbers and percentages.`;
 
@@ -99,8 +107,10 @@ Be direct, data-driven, and actionable. Use specific numbers and percentages.`;
 - Industry: ${userCompData.industry}
 - City: ${userCompData.city}
 - Company Size: ${userCompData.company_size}
-- Benefits: ${userCompData.has_meal_vouchers ? 'Meal Vouchers' : ''} ${userCompData.has_health_insurance ? 'Health Insurance' : ''}`
-      : 'User has not submitted compensation data yet. Encourage them to complete their profile in the Total Rewards tab.';
+- Benefits: ${userCompData.has_meal_vouchers ? 'Meal Vouchers (' + userCompData.meal_vouchers_value + ' RON)' : ''} ${userCompData.has_health_insurance ? 'Health Insurance' : ''} ${userCompData.has_life_insurance ? 'Life Insurance' : ''}
+
+USER HAS SUBMITTED THEIR DATA. Provide detailed analysis.`
+      : 'User has not submitted compensation data yet. Encourage them to complete their profile in the Total Rewards tab first, then come back for analysis.';
 
     const marketSummary = marketData && marketData.length > 0
       ? `Market Data (${marketData.length} entries):

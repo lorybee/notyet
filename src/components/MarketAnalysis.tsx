@@ -73,8 +73,27 @@ const MarketAnalysis = () => {
 
       {analysis && (
         <Card className="p-6">
-          <div className="prose prose-sm max-w-none">
-            <div className="whitespace-pre-wrap">{analysis}</div>
+          <div 
+            className="prose prose-sm max-w-none dark:prose-invert
+              prose-headings:text-foreground prose-headings:font-bold
+              prose-h2:text-xl prose-h2:mt-6 prose-h2:mb-3
+              prose-p:text-muted-foreground prose-p:leading-relaxed
+              prose-strong:text-foreground prose-strong:font-semibold
+              prose-ul:text-muted-foreground prose-ul:my-3
+              prose-li:my-1"
+          >
+            <div 
+              dangerouslySetInnerHTML={{ 
+                __html: analysis
+                  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                  .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                  .replace(/^- (.*$)/gim, '<li>$1</li>')
+                  .replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>')
+                  .replace(/\n\n/g, '</p><p>')
+                  .replace(/^(?!<[hul])/gm, '<p>')
+                  .replace(/(?<![hul]>)$/gm, '</p>')
+              }}
+            />
           </div>
         </Card>
       )}
