@@ -1,4 +1,5 @@
 import benchrightLogo from "@/assets/benchright-logo.png";
+import { Link } from "react-router-dom";
 
 export const Footer = () => {
   return (
@@ -13,7 +14,9 @@ export const Footer = () => {
             <h5 className="font-semibold text-foreground mb-4">Product</h5>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li className="hover:text-foreground cursor-pointer transition-colors">Features</li>
-              <li className="hover:text-foreground cursor-pointer transition-colors">Pricing</li>
+              <li className="hover:text-foreground cursor-pointer transition-colors">
+                <Link to="/pricing">Pricing</Link>
+              </li>
               <li className="hover:text-foreground cursor-pointer transition-colors">Security</li>
             </ul>
           </div>
