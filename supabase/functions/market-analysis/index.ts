@@ -42,22 +42,34 @@ serve(async (req) => {
     console.log('Authenticated user:', user.id);
 
     // Get user's profile
-    const { data: profile } = await supabase
+    const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('*')
       .eq('user_id', user.id)
       .single();
 
+    console.log('Profile data:', profile);
+    if (profileError) {
+      console.error('Profile error:', profileError);
+    }
+
     // Get user's compensation data using anonymous_id
     const anonymousId = profile?.anonymous_compensation_id;
     let userCompData = null;
     
+    console.log('Looking for compensation with anonymous_id:', anonymousId);
+    
     if (anonymousId) {
-      const { data } = await supabase
+      const { data, error: compError } = await supabase
         .from('compensation_data')
         .select('*')
         .eq('anonymous_id', anonymousId)
-        .single();
+        .maybeSingle();
+      
+      console.log('Compensation data found:', data);
+      if (compError) {
+        console.error('Compensation error:', compError);
+      }
       userCompData = data;
     }
 
