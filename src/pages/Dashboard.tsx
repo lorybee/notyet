@@ -18,23 +18,41 @@ import {
   Lightbulb, 
   MessageSquare, 
   Calculator,
-  LogOut
+  LogOut,
+  ShieldCheck,
+  Lock,
+  Server,
+  CheckCircle2,
+  ExternalLink
 } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 const Dashboard = () => {
   const [user, setUser] = useState<SupabaseUser | null>(null);
+  const [displayName, setDisplayName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
-    // Check authentication status
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    // Check authentication status and fetch profile
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (!session) {
         navigate("/auth");
       } else {
         setUser(session.user);
+        
+        // Fetch user profile for display name
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('display_name')
+          .eq('user_id', session.user.id)
+          .single();
+        
+        if (profile?.display_name) {
+          setDisplayName(profile.display_name);
+        }
+        
         setLoading(false);
       }
     });
@@ -114,13 +132,56 @@ const Dashboard = () => {
         <div className="max-w-6xl mx-auto space-y-6">
           {/* Welcome Card */}
           <Card className="p-6 bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 border-none">
-            <h2 className="text-2xl font-bold text-foreground mb-2">
-              Welcome to BenchRight! 👋
+            <h2 className="text-2xl font-bold text-foreground mb-3">
+              👋 Welcome to BenchRight{displayName ? `, ${displayName}` : ''}!
             </h2>
-            <p className="text-muted-foreground">
-              You're on the Freemium plan with access to city-level compensation data. 
-              Start by filling out your Total Rewards information to see how you compare.
+            <p className="text-muted-foreground mb-4">
+              You're on the <span className="font-semibold text-foreground">Freemium plan</span> with access to city-level benchmarks.
             </p>
+            <p className="text-sm text-muted-foreground mb-6">
+              👉 Start by completing your Total Rewards form — it only takes 2 minutes.
+            </p>
+            
+            {/* Trust Indicators */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+              <div className="flex items-center gap-2 text-sm">
+                <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
+                <span className="text-muted-foreground">Anonymous by design</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <ShieldCheck className="h-4 w-4 text-primary flex-shrink-0" />
+                <span className="text-muted-foreground">GDPR compliant (EU)</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <Lock className="h-4 w-4 text-primary flex-shrink-0" />
+                <span className="text-muted-foreground">RLS (Row Level Security) enabled</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <Server className="h-4 w-4 text-primary flex-shrink-0" />
+                <span className="text-muted-foreground">Hosted in EU (Frankfurt)</span>
+              </div>
+            </div>
+
+            {/* Privacy Link */}
+            <div className="pt-4 border-t border-border/50">
+              <p className="text-sm text-muted-foreground mb-2">
+                At BenchRight, we believe fair pay starts with trust — and trust starts with transparency.
+              </p>
+              <a 
+                href="#" 
+                className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toast({
+                    title: "Privacy Guide",
+                    description: "Detailed privacy documentation coming soon. Your data is always encrypted and anonymous by design.",
+                  });
+                }}
+              >
+                How BenchRight keeps your data safe
+                <ExternalLink className="h-3 w-3" />
+              </a>
+            </div>
           </Card>
 
           {/* Dashboard Tabs */}
