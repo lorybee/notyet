@@ -19,7 +19,7 @@ const Landing = () => {
               <Button variant="ghost" className="text-base">
                 Features
               </Button>
-              <Button variant="ghost" className="text-base">
+              <Button variant="ghost" onClick={() => navigate("/pricing")} className="text-base">
                 Pricing
               </Button>
               <Button variant="ghost" className="text-base">
@@ -84,7 +84,7 @@ const Landing = () => {
             <p className="text-muted-foreground mb-6 text-sm">
               See where your salary stands and what benefits you deserve
             </p>
-            <Button onClick={() => navigate("/auth")} className="w-full">
+            <Button onClick={() => navigate("/pricing")} className="w-full">
               Continue as Employee
             </Button>
           </Card>

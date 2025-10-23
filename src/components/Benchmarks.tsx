@@ -939,8 +939,8 @@ export const Benchmarks = () => {
                 <span>Priority support</span>
               </li>
             </ul>
-            <Button size="lg" className="w-full md:w-auto">
-              Start Pro Trial
+            <Button size="lg" className="w-full md:w-auto" asChild>
+              <a href="/pricing">Start Pro Trial</a>
             </Button>
           </div>
         </div>

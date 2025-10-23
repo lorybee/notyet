@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Check } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { Link, useNavigate } from "react-router-dom";
@@ -105,33 +106,39 @@ const Pricing = () => {
             <p className="text-xl text-muted-foreground">Select the perfect plan for your compensation insights needs</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {plans.map((plan) => (
               <Card 
                 key={plan.name} 
-                className={plan.highlighted ? "border-primary shadow-lg scale-105" : ""}
+                className={`relative ${plan.highlighted ? "border-primary shadow-xl scale-105 bg-primary/5" : "hover:border-primary/50 transition-all"}`}
               >
-                <CardHeader>
-                  <CardTitle className="text-2xl">{plan.name}</CardTitle>
-                  <CardDescription>{plan.description}</CardDescription>
+                {plan.highlighted && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <Badge className="px-4 py-1">Most Popular</Badge>
+                  </div>
+                )}
+                <CardHeader className="text-center pb-4">
+                  <CardTitle className="text-2xl mb-2">{plan.name}</CardTitle>
+                  <CardDescription className="text-base">{plan.description}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div>
-                    <span className="text-4xl font-bold">{plan.price}</span>
-                    {plan.period && <span className="text-muted-foreground">{plan.period}</span>}
+                  <div className="text-center py-4">
+                    <span className="text-5xl font-bold">{plan.price}</span>
+                    {plan.period && <span className="text-muted-foreground text-lg">{plan.period}</span>}
                   </div>
                   <ul className="space-y-3">
                     {plan.features.map((feature, index) => (
-                      <li key={index} className="flex items-start gap-2">
+                      <li key={index} className="flex items-start gap-3">
                         <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                        <span className="text-sm">{feature}</span>
+                        <span className="text-sm leading-relaxed">{feature}</span>
                       </li>
                     ))}
                   </ul>
                 </CardContent>
-                <CardFooter>
+                <CardFooter className="pt-6">
                   <Button 
                     className="w-full" 
+                    size="lg"
                     variant={plan.highlighted ? "default" : "outline"}
                     onClick={() => handlePlanClick(plan.name)}
                   >
