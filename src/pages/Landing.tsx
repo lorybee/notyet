@@ -38,33 +38,31 @@ const Landing = () => {
       {/* Hero Content */}
       <section className="container mx-auto px-4 py-12 text-center">
         <div className="mx-auto max-w-5xl space-y-6">
-          <div className="bg-primary text-primary-foreground py-3 px-6 rounded-lg inline-flex items-center gap-2 text-sm">
+          <div className="bg-primary text-primary-foreground py-3 px-6 rounded-lg inline-flex items-center gap-2 text-sm mb-2">
             <Shield className="h-4 w-4" />
             Anonymous & Secure
           </div>
           
-          <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
-            BenchRight <span className="text-green-500">Clear Pay+</span>
-          </h1>
+          <div className="bg-primary text-primary-foreground py-6 px-8 rounded-lg max-w-3xl mx-auto">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+              BenchRight <span className="text-green-400">Clear Pay+</span>
+            </h1>
+          </div>
           
-          <h2 className="text-3xl md:text-4xl font-bold leading-tight">
+          <h2 className="text-3xl md:text-4xl font-bold leading-tight pt-4">
             <span className="text-blue-600">Together</span>{" "}
             <span className="text-green-600">for fair pay.</span>{" "}
             <span className="text-orange-500">Powered by data.</span>{" "}
             <span className="text-blue-600">Driven by people.</span>
           </h2>
           
-          <div className="bg-primary text-primary-foreground py-4 px-8 rounded-lg max-w-3xl mx-auto">
-            <p className="text-xl font-semibold">
-              Transparent compensation benchmarking for Romania's workforce
-            </p>
-          </div>
+          <p className="text-xl text-foreground font-medium pt-4 max-w-3xl mx-auto">
+            Transparent compensation benchmarking for Romania's workforce.
+          </p>
           
-          <div className="bg-primary text-primary-foreground py-6 px-8 rounded-lg max-w-3xl mx-auto">
-            <p className="text-base">
-              Compare real salaries, understand purchasing power, and know your rights—all powered by anonymized data and AI insights.
-            </p>
-          </div>
+          <p className="text-lg text-foreground max-w-3xl mx-auto">
+            Compare real salaries, understand purchasing power, and know your rights. All powered by anonymized data and AI insights.
+          </p>
         </div>
       </section>
 
