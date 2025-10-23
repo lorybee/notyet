@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 export const TotalRewardsForm = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingData, setIsLoadingData] = useState(true);
   const [formData, setFormData] = useState({
     jobTitle: "",
     jobFamily: "",
@@ -32,36 +33,133 @@ export const TotalRewardsForm = () => {
     hasLifeInsurance: false,
   });
 
+  // Load existing user data on mount
+  useEffect(() => {
+    const loadExistingData = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const { data: existingComp } = await supabase
+          .from("compensation_data")
+          .select("*")
+          .eq("anonymous_id", user.id)
+          .maybeSingle();
+
+        if (existingComp) {
+          setFormData({
+            jobTitle: existingComp.job_title || "",
+            jobFamily: "", // Not stored in DB yet
+            experienceLevel: existingComp.experience_level || "",
+            companySize: existingComp.company_size || "",
+            industry: existingComp.industry || "",
+            country: existingComp.country || "Romania",
+            city: existingComp.city || "",
+            contractType: existingComp.contract_type || "permanent",
+            schedule: existingComp.schedule || "full-time",
+            workModel: existingComp.work_model || "hybrid",
+            grossSalary: existingComp.gross_salary?.toString() || "",
+            netSalary: existingComp.net_salary?.toString() || "",
+            tenureYears: existingComp.tenure_years?.toString() || "",
+            paidLeaveDays: existingComp.paid_leave_days?.toString() || "",
+            hasMealVouchers: existingComp.has_meal_vouchers || false,
+            mealVouchersValue: existingComp.meal_vouchers_value?.toString() || "",
+            hasHealthInsurance: existingComp.has_health_insurance || false,
+            hasLifeInsurance: existingComp.has_life_insurance || false,
+          });
+        }
+      } catch (error) {
+        console.error("Error loading existing data:", error);
+      } finally {
+        setIsLoadingData(false);
+      }
+    };
+
+    loadExistingData();
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      const { error } = await supabase.from("compensation_data").insert({
-        job_title: formData.jobTitle,
-        experience_level: formData.experienceLevel,
-        company_size: formData.companySize,
-        industry: formData.industry,
-        city: formData.city,
-        country: formData.country,
-        contract_type: formData.contractType,
-        schedule: formData.schedule,
-        work_model: formData.workModel,
-        gross_salary: parseFloat(formData.grossSalary),
-        net_salary: parseFloat(formData.netSalary),
-        tenure_years: formData.tenureYears ? parseInt(formData.tenureYears) : null,
-        paid_leave_days: formData.paidLeaveDays ? parseInt(formData.paidLeaveDays) : null,
-        has_meal_vouchers: formData.hasMealVouchers,
-        meal_vouchers_value: formData.mealVouchersValue ? parseFloat(formData.mealVouchersValue) : null,
-        has_health_insurance: formData.hasHealthInsurance,
-        has_life_insurance: formData.hasLifeInsurance,
-      });
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        throw new Error("You must be logged in to submit compensation data");
+      }
 
-      if (error) throw error;
+      // First, check if user already has compensation data
+      const { data: existingData } = await supabase
+        .from("compensation_data")
+        .select("id")
+        .eq("anonymous_id", user.id)
+        .maybeSingle();
+
+      if (existingData) {
+        // Update existing record
+        const { error } = await supabase
+          .from("compensation_data")
+          .update({
+            job_title: formData.jobTitle,
+            experience_level: formData.experienceLevel,
+            company_size: formData.companySize,
+            industry: formData.industry,
+            city: formData.city,
+            country: formData.country,
+            contract_type: formData.contractType,
+            schedule: formData.schedule,
+            work_model: formData.workModel,
+            gross_salary: parseFloat(formData.grossSalary),
+            net_salary: parseFloat(formData.netSalary),
+            tenure_years: formData.tenureYears ? parseInt(formData.tenureYears) : null,
+            paid_leave_days: formData.paidLeaveDays ? parseInt(formData.paidLeaveDays) : null,
+            has_meal_vouchers: formData.hasMealVouchers,
+            meal_vouchers_value: formData.mealVouchersValue ? parseFloat(formData.mealVouchersValue) : null,
+            has_health_insurance: formData.hasHealthInsurance,
+            has_life_insurance: formData.hasLifeInsurance,
+          })
+          .eq("id", existingData.id);
+
+        if (error) throw error;
+      } else {
+        // Insert new record with user's ID
+        const { error } = await supabase.from("compensation_data").insert({
+          anonymous_id: user.id, // Link to user's account
+          job_title: formData.jobTitle,
+          experience_level: formData.experienceLevel,
+          company_size: formData.companySize,
+          industry: formData.industry,
+          city: formData.city,
+          country: formData.country,
+          contract_type: formData.contractType,
+          schedule: formData.schedule,
+          work_model: formData.workModel,
+          gross_salary: parseFloat(formData.grossSalary),
+          net_salary: parseFloat(formData.netSalary),
+          tenure_years: formData.tenureYears ? parseInt(formData.tenureYears) : null,
+          paid_leave_days: formData.paidLeaveDays ? parseInt(formData.paidLeaveDays) : null,
+          has_meal_vouchers: formData.hasMealVouchers,
+          meal_vouchers_value: formData.mealVouchersValue ? parseFloat(formData.mealVouchersValue) : null,
+          has_health_insurance: formData.hasHealthInsurance,
+          has_life_insurance: formData.hasLifeInsurance,
+        });
+
+        if (error) throw error;
+      }
+
+      // Update user's profile with city and industry
+      await supabase
+        .from("profiles")
+        .update({
+          city: formData.city,
+          industry: formData.industry,
+        })
+        .eq("user_id", user.id);
 
       toast({
         title: "Success!",
-        description: "Your compensation data has been submitted anonymously.",
+        description: existingData ? "Your compensation data has been updated." : "Your compensation data has been submitted.",
       });
 
       // Reset form
@@ -96,6 +194,14 @@ export const TotalRewardsForm = () => {
       setIsLoading(false);
     }
   };
+
+  if (isLoadingData) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <p className="text-muted-foreground">Loading your data...</p>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
