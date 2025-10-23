@@ -103,6 +103,18 @@ export const TotalRewardsForm = () => {
     setIsLoading(true);
 
     try {
+      // Validate required fields
+      if (!formData.companySize || !formData.experienceLevel || !formData.jobTitle || 
+          !formData.industry || !formData.city || !formData.grossSalary || !formData.netSalary) {
+        throw new Error("Please fill in all required fields");
+      }
+
+      // Validate company size is one of the allowed values
+      const validCompanySizes = ['1-10', '11-50', '51-200', '201-500', '500+'];
+      if (!validCompanySizes.includes(formData.companySize)) {
+        throw new Error("Invalid company size selected");
+      }
+
       // Get current user
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
