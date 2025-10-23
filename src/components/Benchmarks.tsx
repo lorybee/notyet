@@ -116,7 +116,40 @@ export const Benchmarks = () => {
   const [tenureData, setTenureData] = useState<TenureData[]>([]);
 
   useEffect(() => {
+    // Clear all state before fetching
+    setUserProfile(null);
+    setSalaryDistGross([]);
+    setSalaryDistNet([]);
+    setCompanySizeSalaries([]);
+    setBenefitStats(null);
+    setPaidLeave(null);
+    setWorkModelDist([]);
+    setContractTypeDist([]);
+    setTenureData([]);
+    
     fetchBenchmarks();
+
+    // Subscribe to auth changes to refetch when user changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        fetchBenchmarks();
+      } else if (event === 'SIGNED_OUT') {
+        // Clear all data on sign out
+        setUserProfile(null);
+        setSalaryDistGross([]);
+        setSalaryDistNet([]);
+        setCompanySizeSalaries([]);
+        setBenefitStats(null);
+        setPaidLeave(null);
+        setWorkModelDist([]);
+        setContractTypeDist([]);
+        setTenureData([]);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const calculatePercentile = (value: number, sortedValues: number[]): number => {
