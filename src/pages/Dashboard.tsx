@@ -132,56 +132,66 @@ const Dashboard = () => {
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto space-y-6">
           {/* Welcome Card */}
-          <Card className="p-6 bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 border-none">
-            <h2 className="text-2xl font-bold text-foreground mb-3">
-              👋 Welcome to BenchRight{displayName ? `, ${displayName}` : ''}!
-            </h2>
-            <p className="text-muted-foreground mb-4">
-              You're on the <span className="font-semibold text-foreground">Freemium plan</span> with access to city-level benchmarks.
-            </p>
-            <p className="text-sm text-muted-foreground mb-6">
-              👉 Start by completing your Total Rewards form — it only takes 2 minutes.
-            </p>
-            
-            {/* Trust Indicators */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-              <div className="flex items-center gap-2 text-sm">
-                <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
-                <span className="text-muted-foreground">Anonymous by design</span>
+          <Card className="p-8 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 border border-border/50">
+            <div className="space-y-6">
+              {/* Welcome Header */}
+              <div>
+                <h2 className="text-3xl font-bold text-foreground mb-3">
+                  👋 Welcome to BenchRight{displayName ? `, ${displayName}` : ''}!
+                </h2>
+                <p className="text-base text-muted-foreground">
+                  You're on the <span className="font-semibold text-foreground">Freemium plan</span> with access to city-level benchmarks.
+                </p>
               </div>
-              <div className="flex items-center gap-2 text-sm">
-                <ShieldCheck className="h-4 w-4 text-primary flex-shrink-0" />
-                <span className="text-muted-foreground">GDPR compliant (EU)</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <Lock className="h-4 w-4 text-primary flex-shrink-0" />
-                <span className="text-muted-foreground">RLS (Row Level Security) enabled</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <Server className="h-4 w-4 text-primary flex-shrink-0" />
-                <span className="text-muted-foreground">Hosted in EU (Frankfurt)</span>
-              </div>
-            </div>
 
-            {/* Privacy Link */}
-            <div className="pt-4 border-t border-border/50">
-              <p className="text-sm text-muted-foreground mb-2">
-                At BenchRight, we believe fair pay starts with trust — and trust starts with transparency.
-              </p>
-              <a 
-                href="#" 
-                className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
-                onClick={(e) => {
-                  e.preventDefault();
-                  toast({
-                    title: "Privacy Guide",
-                    description: "Detailed privacy documentation coming soon. Your data is always encrypted and anonymous by design.",
-                  });
-                }}
-              >
-                How BenchRight keeps your data safe
-                <ExternalLink className="h-3 w-3" />
-              </a>
+              {/* Call to Action */}
+              <div className="flex items-start gap-3 p-4 bg-primary/10 rounded-lg border border-primary/20">
+                <span className="text-2xl">👉</span>
+                <p className="text-sm text-foreground">
+                  Start by completing your Total Rewards form — it only takes 2 minutes.
+                </p>
+              </div>
+
+              {/* Trust Indicators Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span>Anonymous by design</span>
+                </div>
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <ShieldCheck className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span>GDPR compliant (EU)</span>
+                </div>
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <Lock className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span>RLS (Row Level Security) enabled</span>
+                </div>
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <Server className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span>Hosted in EU (Frankfurt)</span>
+                </div>
+              </div>
+
+              {/* Privacy Statement */}
+              <div className="pt-4 border-t border-border/50 space-y-2">
+                <p className="text-sm text-muted-foreground">
+                  At BenchRight, we believe fair pay starts with trust — and trust starts with transparency.
+                </p>
+                <a 
+                  href="#" 
+                  className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors group"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toast({
+                      title: "Privacy Guide",
+                      description: "Detailed privacy documentation coming soon. Your data is always encrypted and anonymous by design.",
+                    });
+                  }}
+                >
+                  How BenchRight keeps your data safe
+                  <ExternalLink className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
+                </a>
+              </div>
             </div>
           </Card>
 
