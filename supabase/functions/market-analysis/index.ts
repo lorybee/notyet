@@ -80,23 +80,7 @@ serve(async (req) => {
       .limit(100);
 
     const systemPrompt = `You are a compensation analysis expert specializing in Romanian market data. 
-
-IMPORTANT: Format your response in clear markdown with:
-- Use ## for main sections
-- Use **bold** for key metrics and numbers
-- Use bullet points for lists
-- Include specific percentages and comparisons
-- Make it scannable and easy to read
-
-Analyze the user's compensation against market benchmarks and provide:
-
-1. **Market Position** - Where they stand (percentile, above/below average)
-2. **Salary Analysis** - Specific gaps or advantages with numbers
-3. **Benefits Comparison** - How their benefits stack up
-4. **Career Recommendations** - Actionable next steps
-5. **Location Insights** - City-specific analysis
-
-Be direct, data-driven, and actionable. Use specific numbers and percentages.`;
+Analyze the user's compensation and provide structured, data-driven insights.`;
 
     const userContext = userCompData 
       ? `User's Data:
@@ -107,10 +91,17 @@ Be direct, data-driven, and actionable. Use specific numbers and percentages.`;
 - Industry: ${userCompData.industry}
 - City: ${userCompData.city}
 - Company Size: ${userCompData.company_size}
-- Benefits: ${userCompData.has_meal_vouchers ? 'Meal Vouchers (' + userCompData.meal_vouchers_value + ' RON)' : ''} ${userCompData.has_health_insurance ? 'Health Insurance' : ''} ${userCompData.has_life_insurance ? 'Life Insurance' : ''}
+- Benefits: ${userCompData.has_meal_vouchers ? 'Meal Vouchers (' + userCompData.meal_vouchers_value + ' RON)' : ''} ${userCompData.has_health_insurance ? 'Health Insurance' : ''} ${userCompData.has_life_insurance ? 'Life Insurance' : ''}`
+      : null;
 
-USER HAS SUBMITTED THEIR DATA. Provide detailed analysis.`
-      : 'User has not submitted compensation data yet. Encourage them to complete their profile in the Total Rewards tab first, then come back for analysis.';
+    if (!userContext) {
+      return new Response(JSON.stringify({ 
+        needsData: true,
+        message: 'Please complete your Total Rewards profile first to get personalized analysis.' 
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
     const marketSummary = marketData && marketData.length > 0
       ? `Market Data (${marketData.length} entries):
@@ -128,8 +119,59 @@ Range: ${Math.min(...marketData.map(d => Number(d.gross_salary)))} - ${Math.max(
         model: 'google/gemini-2.5-flash',
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: `${userContext}\n\n${marketSummary}\n\nProvide a comprehensive market analysis with specific recommendations.` }
+          { role: 'user', content: `${userContext}\n\n${marketSummary}\n\nProvide comprehensive analysis.` }
         ],
+        tools: [{
+          type: 'function',
+          function: {
+            name: 'provide_compensation_analysis',
+            description: 'Provide structured compensation analysis',
+            parameters: {
+              type: 'object',
+              properties: {
+                percentile: { type: 'number', description: 'User percentile (0-100)' },
+                percentileText: { type: 'string', description: 'Description like "You earn more than X% of [Job Title]s in [City]"' },
+                vsMarketAverage: { type: 'number', description: 'Percentage difference vs market average' },
+                marketAverageGross: { type: 'number', description: 'Market average gross salary' },
+                top10Gross: { type: 'number', description: 'Top 10% gross salary' },
+                strengths: { 
+                  type: 'array', 
+                  items: { type: 'string' },
+                  description: 'List of 3-4 competitive strengths'
+                },
+                opportunities: { 
+                  type: 'array', 
+                  items: { type: 'string' },
+                  description: 'List of 3-4 growth opportunities'
+                },
+                careerMoves: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      title: { type: 'string' },
+                      impact: { type: 'string' },
+                      actions: { type: 'array', items: { type: 'string' } }
+                    }
+                  },
+                  description: '3 actionable career recommendations'
+                },
+                marketInsights: { 
+                  type: 'array', 
+                  items: { type: 'string' },
+                  description: '3-4 quick market context insights'
+                },
+                talkingPoints: {
+                  type: 'array',
+                  items: { type: 'string' },
+                  description: '3 data-driven negotiation talking points'
+                }
+              },
+              required: ['percentile', 'percentileText', 'vsMarketAverage', 'marketAverageGross', 'top10Gross', 'strengths', 'opportunities', 'careerMoves', 'marketInsights', 'talkingPoints']
+            }
+          }
+        }],
+        tool_choice: { type: 'function', function: { name: 'provide_compensation_analysis' } }
       }),
     });
 
@@ -150,9 +192,23 @@ Range: ${Math.min(...marketData.map(d => Number(d.gross_salary)))} - ${Math.max(
     }
 
     const data = await response.json();
-    const analysis = data.choices[0].message.content;
+    const toolCall = data.choices[0].message.tool_calls?.[0];
+    
+    if (!toolCall) {
+      throw new Error('No structured analysis returned');
+    }
 
-    return new Response(JSON.stringify({ analysis }), {
+    const analysis = JSON.parse(toolCall.function.arguments);
+
+    return new Response(JSON.stringify({ 
+      analysis,
+      userData: {
+        grossSalary: userCompData.gross_salary,
+        netSalary: userCompData.net_salary,
+        jobTitle: userCompData.job_title,
+        city: userCompData.city
+      }
+    }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
