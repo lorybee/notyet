@@ -50,13 +50,22 @@ const Landing = () => {
           </div>
           
           <h2 className="text-3xl md:text-5xl font-semibold leading-relaxed pt-4 space-y-2">
-            <div className="bg-[var(--gradient-headline-1)] bg-clip-text text-transparent">
+            <div 
+              className="bg-clip-text text-transparent"
+              style={{ backgroundImage: 'linear-gradient(90deg, #1D4E89, #2E8B57)' }}
+            >
               Together for fair pay.
             </div>
-            <div className="bg-[var(--gradient-headline-2)] bg-clip-text text-transparent">
+            <div 
+              className="bg-clip-text text-transparent"
+              style={{ backgroundImage: 'linear-gradient(90deg, #F5B700, #CC8800)' }}
+            >
               Powered by data.
             </div>
-            <div className="bg-[var(--gradient-headline-3)] bg-clip-text text-transparent">
+            <div 
+              className="bg-clip-text text-transparent"
+              style={{ backgroundImage: 'linear-gradient(90deg, #2E8B57, #1D4E89)' }}
+            >
               Driven by people.
             </div>
           </h2>
