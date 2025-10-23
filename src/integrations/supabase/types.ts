@@ -14,60 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      benchmark_data: {
-        Row: {
-          avg_benefits_value: number | null
-          avg_gross_salary: number
-          avg_net_salary: number
-          city: string
-          company_size: string
-          country: string
-          created_at: string
-          experience_level: string
-          id: string
-          industry: string
-          p25_total_rewards: number | null
-          p50_total_rewards: number | null
-          p75_total_rewards: number | null
-          sample_size: number | null
-          updated_at: string
-        }
-        Insert: {
-          avg_benefits_value?: number | null
-          avg_gross_salary: number
-          avg_net_salary: number
-          city: string
-          company_size: string
-          country?: string
-          created_at?: string
-          experience_level: string
-          id?: string
-          industry: string
-          p25_total_rewards?: number | null
-          p50_total_rewards?: number | null
-          p75_total_rewards?: number | null
-          sample_size?: number | null
-          updated_at?: string
-        }
-        Update: {
-          avg_benefits_value?: number | null
-          avg_gross_salary?: number
-          avg_net_salary?: number
-          city?: string
-          company_size?: string
-          country?: string
-          created_at?: string
-          experience_level?: string
-          id?: string
-          industry?: string
-          p25_total_rewards?: number | null
-          p50_total_rewards?: number | null
-          p75_total_rewards?: number | null
-          sample_size?: number | null
-          updated_at?: string
-        }
-        Relationships: []
-      }
       compensation_data: {
         Row: {
           anonymous_id: string
