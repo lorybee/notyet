@@ -19,7 +19,7 @@ export const TotalRewardsForm = () => {
     industry: "",
     country: "Romania",
     city: "",
-    contractType: "full-time",
+    contractType: "permanent",
     schedule: "full-time",
     workModel: "hybrid",
     grossSalary: "",
@@ -73,7 +73,7 @@ export const TotalRewardsForm = () => {
         industry: "",
         country: "Romania",
         city: "",
-        contractType: "full-time",
+        contractType: "permanent",
         schedule: "full-time",
         workModel: "hybrid",
         grossSalary: "",
@@ -238,6 +238,24 @@ export const TotalRewardsForm = () => {
                 <SelectItem value="Iași">Iași</SelectItem>
                 <SelectItem value="Brașov">Brașov</SelectItem>
                 <SelectItem value="Other">Other</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="contractType">Contract Type *</Label>
+            <Select
+              value={formData.contractType}
+              onValueChange={(value) => setFormData({ ...formData, contractType: value })}
+              required
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select contract type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="permanent">Permanent</SelectItem>
+                <SelectItem value="fixed-term">Fixed-term</SelectItem>
+                <SelectItem value="contractor">Contractor</SelectItem>
               </SelectContent>
             </Select>
           </div>
