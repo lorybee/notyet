@@ -73,11 +73,14 @@ serve(async (req) => {
       userCompData = data;
     }
 
-    // Get market benchmarks
+    // Get market benchmarks - filter by user's city for freemium
     const { data: marketData } = await supabase
       .from('compensation_data')
       .select('gross_salary, net_salary, job_title, experience_level, industry, city')
+      .eq('city', userCompData.city)
       .limit(100);
+    
+    console.log(`Found ${marketData?.length || 0} compensation entries for ${userCompData.city}`);
 
     const systemPrompt = `You are a compensation analysis expert specializing in Romanian market data. 
 Analyze the user's compensation and provide structured, data-driven insights.`;
@@ -207,7 +210,8 @@ Range: ${Math.min(...marketData.map(d => Number(d.gross_salary)))} - ${Math.max(
         netSalary: userCompData.net_salary,
         jobTitle: userCompData.job_title,
         city: userCompData.city
-      }
+      },
+      dataPoints: marketData?.length || 0
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
