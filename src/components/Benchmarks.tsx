@@ -310,7 +310,7 @@ export const Benchmarks = () => {
         d.experience_level === userData.experience_level
       );
 
-      if (benefitFilterData.length >= 2) {
+      if (benefitFilterData.length >= 1) {
         const mealCount = benefitFilterData.filter((d: any) => d.has_meal_vouchers).length;
         const healthCount = benefitFilterData.filter((d: any) => d.has_health_insurance).length;
         const lifeCount = benefitFilterData.filter((d: any) => d.has_life_insurance).length;
