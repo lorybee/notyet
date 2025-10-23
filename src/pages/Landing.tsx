@@ -159,7 +159,11 @@ const Landing = () => {
       {/* Footer */}
       <footer className="border-t border-border/50 py-12 bg-muted/30">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-12 max-w-4xl mx-auto mb-8">
+          <div className="grid md:grid-cols-4 gap-12 max-w-6xl mx-auto mb-8">
+            <div>
+              <img src={benchrightLogo} alt="BenchRight Logo" className="h-24 mb-4" />
+            </div>
+            
             <div>
               <h5 className="font-semibold text-foreground mb-4">Product</h5>
               <ul className="space-y-2 text-sm text-muted-foreground">
