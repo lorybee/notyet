@@ -11,7 +11,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Save } from "lucide-react";
+import { Loader2, Save, CheckCircle2 } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface ProfileSettingsFormProps {
   userId: string;
@@ -65,6 +66,9 @@ export const ProfileSettingsForm = ({ userId }: ProfileSettingsFormProps) => {
   const [industry, setIndustry] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [justSaved, setJustSaved] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
+  const [originalData, setOriginalData] = useState({ displayName: "", city: "", industry: "" });
   const { toast } = useToast();
 
   useEffect(() => {
@@ -82,9 +86,15 @@ export const ProfileSettingsForm = ({ userId }: ProfileSettingsFormProps) => {
       if (error) throw error;
 
       if (data) {
-        setDisplayName(data.display_name || "");
-        setCity(data.city || "");
-        setIndustry(data.industry || "");
+        const loadedData = {
+          displayName: data.display_name || "",
+          city: data.city || "",
+          industry: data.industry || ""
+        };
+        setDisplayName(loadedData.displayName);
+        setCity(loadedData.city);
+        setIndustry(loadedData.industry);
+        setOriginalData(loadedData);
       }
     } catch (error: any) {
       toast({
@@ -99,6 +109,7 @@ export const ProfileSettingsForm = ({ userId }: ProfileSettingsFormProps) => {
 
   const handleSave = async () => {
     setSaving(true);
+    setJustSaved(false);
     try {
       const { error } = await supabase
         .from('profiles')
@@ -111,10 +122,22 @@ export const ProfileSettingsForm = ({ userId }: ProfileSettingsFormProps) => {
 
       if (error) throw error;
 
+      const newData = {
+        displayName: displayName.trim(),
+        city,
+        industry
+      };
+      setOriginalData(newData);
+      setHasChanges(false);
+      setJustSaved(true);
+
       toast({
         title: "Profile updated",
         description: "Your profile settings have been saved successfully.",
       });
+
+      // Hide success message after 5 seconds
+      setTimeout(() => setJustSaved(false), 5000);
     } catch (error: any) {
       toast({
         title: "Error saving profile",
@@ -126,6 +149,16 @@ export const ProfileSettingsForm = ({ userId }: ProfileSettingsFormProps) => {
     }
   };
 
+  // Check for changes
+  useEffect(() => {
+    const changed = 
+      displayName !== originalData.displayName ||
+      city !== originalData.city ||
+      industry !== originalData.industry;
+    setHasChanges(changed);
+    if (changed) setJustSaved(false);
+  }, [displayName, city, industry, originalData]);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-8">
@@ -136,6 +169,15 @@ export const ProfileSettingsForm = ({ userId }: ProfileSettingsFormProps) => {
 
   return (
     <div className="space-y-6 max-w-2xl">
+      {justSaved && (
+        <Alert className="bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800">
+          <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />
+          <AlertDescription className="text-green-800 dark:text-green-200">
+            Profile saved successfully! Your changes have been applied.
+          </AlertDescription>
+        </Alert>
+      )}
+
       <div className="space-y-2">
         <Label htmlFor="displayName">Display Name (Optional)</Label>
         <Input
@@ -188,7 +230,7 @@ export const ProfileSettingsForm = ({ userId }: ProfileSettingsFormProps) => {
       </div>
 
       <div className="flex gap-3 pt-4">
-        <Button onClick={handleSave} disabled={saving}>
+        <Button onClick={handleSave} disabled={saving || !hasChanges}>
           {saving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -197,10 +239,15 @@ export const ProfileSettingsForm = ({ userId }: ProfileSettingsFormProps) => {
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Save Profile
+              {hasChanges ? "Save Changes" : "No Changes"}
             </>
           )}
         </Button>
+        {!hasChanges && !justSaved && originalData.city && (
+          <p className="text-sm text-muted-foreground flex items-center">
+            All changes saved
+          </p>
+        )}
       </div>
     </div>
   );
