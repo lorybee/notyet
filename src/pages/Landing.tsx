@@ -49,14 +49,13 @@ const Landing = () => {
           </div>
           
           <h2 className="text-3xl md:text-5xl font-bold leading-tight pt-4">
-            <span className="text-[#3B82F6]">Together </span>
-            <span className="text-[#5FD896]">for fair </span>
-            <span className="text-[#F97316]">pay. </span>
-            <span className="text-[#5FD896]">Powered </span>
-            <span className="text-[#8B7DA8]">by data. </span>
+            <span className="text-[#1E88E5]">Together </span>
+            <span className="text-[#7CB342]">for fair pay. </span>
+            <span className="text-[#7CB342]">Powered </span>
+            <span className="text-[#7986CB]">by data. </span>
             <br />
-            <span className="text-[#F97316]">Driven </span>
-            <span className="text-[#3B82F6]">by people.</span>
+            <span className="text-[#FF7043]">Driven </span>
+            <span className="text-[#1E88E5]">by people.</span>
           </h2>
           
           <p className="text-xl text-foreground font-medium pt-6 max-w-3xl mx-auto">
