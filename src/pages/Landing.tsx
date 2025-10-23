@@ -3,12 +3,13 @@ import { Card } from "@/components/ui/card";
 import { Shield, Users, BarChart3 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import benchrightLogo from "@/assets/benchright-logo.png";
+import { Footer } from "@/components/Footer";
 
 const Landing = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background flex flex-col">
       {/* Header */}
       <header className="bg-muted/30 border-b border-border/50">
         <div className="container mx-auto px-4 py-2">
@@ -161,47 +162,7 @@ const Landing = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border/50 py-12 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-12 max-w-6xl mx-auto mb-8">
-            <div>
-              <img src={benchrightLogo} alt="BenchRight Logo" className="h-24 mb-4" />
-            </div>
-            
-            <div>
-              <h5 className="font-semibold text-foreground mb-4">Product</h5>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li className="hover:text-foreground cursor-pointer transition-colors">Features</li>
-                <li className="hover:text-foreground cursor-pointer transition-colors">Pricing</li>
-                <li className="hover:text-foreground cursor-pointer transition-colors">Security</li>
-              </ul>
-            </div>
-
-            <div>
-              <h5 className="font-semibold text-foreground mb-4">Resources</h5>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li className="hover:text-foreground cursor-pointer transition-colors">Knowledge Base</li>
-                <li className="hover:text-foreground cursor-pointer transition-colors">Labour Law Guide</li>
-                <li className="hover:text-foreground cursor-pointer transition-colors">Salary Reports</li>
-              </ul>
-            </div>
-
-            <div>
-              <h5 className="font-semibold text-foreground mb-4">Legal</h5>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li className="hover:text-foreground cursor-pointer transition-colors">Privacy Policy</li>
-                <li className="hover:text-foreground cursor-pointer transition-colors">Terms of Service</li>
-                <li className="hover:text-foreground cursor-pointer transition-colors">AGPL-3.0 License</li>
-              </ul>
-            </div>
-          </div>
-          
-          <div className="text-center text-sm text-muted-foreground space-y-2 pt-8 border-t border-border/50">
-            <p>© 2025 BenchRight. Open source under AGPL-3.0. Data hosted in the EU (Frankfurt region).</p>
-            <p>Developed by Team EmpowerAI – KnowYourRights</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

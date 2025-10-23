@@ -12,6 +12,7 @@ import MarketAnalysis from "@/components/MarketAnalysis";
 import LabourLawChat from "@/components/LabourLawChat";
 import SalaryTimeMachine from "@/components/SalaryTimeMachine";
 import { ProfileSettingsForm } from "@/components/ProfileSettingsForm";
+import { Footer } from "@/components/Footer";
 import { 
   BarChart3, 
   User, 
@@ -115,7 +116,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background flex flex-col">
       {/* Header */}
       <header className="border-b border-border/50 bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
@@ -293,6 +294,9 @@ const Dashboard = () => {
           </Card>
         </div>
       </main>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };
