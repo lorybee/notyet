@@ -476,7 +476,11 @@ export const TotalRewardsForm = () => {
               id="grossSalary"
               type="number"
               value={formData.grossSalary}
-              onChange={(e) => setFormData({ ...formData, grossSalary: e.target.value })}
+              onChange={(e) => {
+                const grossValue = e.target.value;
+                const netValue = grossValue ? (parseFloat(grossValue) * 0.585).toFixed(2) : "";
+                setFormData({ ...formData, grossSalary: grossValue, netSalary: netValue });
+              }}
               placeholder="e.g. 10000"
               required
             />
@@ -488,7 +492,11 @@ export const TotalRewardsForm = () => {
               id="netSalary"
               type="number"
               value={formData.netSalary}
-              onChange={(e) => setFormData({ ...formData, netSalary: e.target.value })}
+              onChange={(e) => {
+                const netValue = e.target.value;
+                const grossValue = netValue ? (parseFloat(netValue) / 0.585).toFixed(2) : "";
+                setFormData({ ...formData, netSalary: netValue, grossSalary: grossValue });
+              }}
               placeholder="e.g. 6000"
               required
             />
