@@ -40,7 +40,7 @@ export const TotalRewardsForm = ({ onSubmitSuccess }: TotalRewardsFormProps = {}
     hasLifeInsurance: false,
   });
 
-  // Load existing user data on mount
+  // Load existing user data on mount and when component remounts
   useEffect(() => {
     const loadExistingData = async () => {
       try {
@@ -101,7 +101,7 @@ export const TotalRewardsForm = ({ onSubmitSuccess }: TotalRewardsFormProps = {}
     };
 
     loadExistingData();
-  }, []);
+  }, []); // Keep empty array - component will remount with new key
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

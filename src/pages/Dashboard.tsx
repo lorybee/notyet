@@ -35,6 +35,7 @@ const Dashboard = () => {
   const [displayName, setDisplayName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("profile");
+  const [refreshKey, setRefreshKey] = useState(0);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -219,16 +220,31 @@ const Dashboard = () => {
                     Submit your compensation data anonymously to contribute to market insights and access personalized benchmarks.
                   </p>
                 </div>
-                <TotalRewardsForm onSubmitSuccess={() => setActiveTab("benchmarks")} />
+                <TotalRewardsForm 
+                  onSubmitSuccess={() => {
+                    // Increment refresh key to force remount of Benchmarks and Insights
+                    setRefreshKey(prev => prev + 1);
+                    setTimeout(() => {
+                      setActiveTab("benchmarks");
+                    }, 1500);
+                  }} 
+                />
               </div>
             </TabsContent>
 
             <TabsContent value="benchmarks" className="mt-6">
-              <Benchmarks onViewInsights={() => setActiveTab("insights")} />
+              <Benchmarks 
+                key={`benchmarks-${refreshKey}`}
+                onViewInsights={() => {
+                  setTimeout(() => {
+                    setActiveTab("insights");
+                  }, 1500);
+                }}
+              />
             </TabsContent>
 
             <TabsContent value="insights" className="mt-6">
-              <MarketAnalysis />
+              <MarketAnalysis key={`insights-${refreshKey}`} />
             </TabsContent>
 
             <TabsContent value="law" className="mt-6">
