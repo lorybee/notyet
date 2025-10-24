@@ -222,11 +222,13 @@ const Dashboard = () => {
                 </div>
                 <TotalRewardsForm 
                   onSubmitSuccess={() => {
-                    // Increment refresh key to force remount of Benchmarks and Insights
-                    setRefreshKey(prev => prev + 1);
+                    // Wait for database to fully update, then refresh and navigate
                     setTimeout(() => {
-                      setActiveTab("benchmarks");
-                    }, 1500);
+                      setRefreshKey(prev => prev + 1);
+                      setTimeout(() => {
+                        setActiveTab("benchmarks");
+                      }, 300);
+                    }, 500);
                   }} 
                 />
               </div>

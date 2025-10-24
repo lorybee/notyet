@@ -121,6 +121,7 @@ export const Benchmarks = ({ onViewInsights }: BenchmarksProps = {}) => {
 
   useEffect(() => {
     // Clear all state before fetching
+    setIsLoading(true);
     setUserProfile(null);
     setSalaryDistGross([]);
     setSalaryDistNet([]);
@@ -131,7 +132,12 @@ export const Benchmarks = ({ onViewInsights }: BenchmarksProps = {}) => {
     setContractTypeDist([]);
     setTenureData([]);
     
-    fetchBenchmarks();
+    // Small delay to ensure database writes have completed
+    const timer = setTimeout(() => {
+      fetchBenchmarks();
+    }, 100);
+    
+    return () => clearTimeout(timer);
 
     // Subscribe to auth changes to refetch when user changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
@@ -178,10 +184,15 @@ export const Benchmarks = ({ onViewInsights }: BenchmarksProps = {}) => {
 
   const fetchBenchmarks = async () => {
     try {
+      setIsLoading(true);
+      
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) {
+        setIsLoading(false);
+        return;
+      }
 
-      // Get user's anonymous compensation ID from profile
+      // Get user's anonymous compensation ID from profile with cache busting
       const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("anonymous_compensation_id, city, industry")
@@ -190,6 +201,7 @@ export const Benchmarks = ({ onViewInsights }: BenchmarksProps = {}) => {
 
       if (profileError) throw profileError;
       if (!profile?.anonymous_compensation_id) {
+        setIsLoading(false);
         toast({
           title: "No data found",
           description: "Please complete your compensation profile first.",
@@ -198,22 +210,28 @@ export const Benchmarks = ({ onViewInsights }: BenchmarksProps = {}) => {
         return;
       }
 
-      // Fetch all compensation data
+      // Fetch all compensation data with fresh query
       const { data: allData, error: allError } = await supabase
         .from("compensation_data")
         .select("*");
 
       if (allError) throw allError;
-      if (!allData || allData.length === 0) return;
+      if (!allData || allData.length === 0) {
+        setIsLoading(false);
+        return;
+      }
 
-      // Get user's compensation data using anonymous ID
+      // Get user's compensation data using anonymous ID - force fresh fetch
       const { data: userCompData } = await supabase
         .from("compensation_data")
         .select("*")
         .eq("anonymous_id", profile.anonymous_compensation_id)
+        .order('created_at', { ascending: false })
+        .limit(1)
         .maybeSingle();
 
       if (!userCompData) {
+        setIsLoading(false);
         toast({
           title: "No data found",
           description: "Please complete your compensation profile first.",

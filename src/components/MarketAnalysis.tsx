@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
@@ -40,6 +40,15 @@ const MarketAnalysis = () => {
   const [experienceLevel, setExperienceLevel] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+
+  // Clear analysis when component mounts to force fresh generation
+  useEffect(() => {
+    setAnalysis(null);
+    setUserData(null);
+    setDataPoints(0);
+    setSalaryRange(null);
+    setExperienceLevel('');
+  }, []);
 
   const generateAnalysis = async () => {
     setIsLoading(true);
