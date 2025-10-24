@@ -102,7 +102,11 @@ const COLORS = {
 const EXP_LEVELS = ['Junior (2-5 years)', 'Mid-Level (5-10 years)', 'Senior (10-15 years)', 'Lead (15+ years)'];
 const COMPANY_SIZES = ['1-50', '51-200', '201-500', '500+'];
 
-export const Benchmarks = () => {
+interface BenchmarksProps {
+  onViewInsights?: () => void;
+}
+
+export const Benchmarks = ({ onViewInsights }: BenchmarksProps = {}) => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
@@ -907,6 +911,22 @@ export const Benchmarks = () => {
               );
             }
           })()}
+        </Card>
+      )}
+
+      {/* NEXT STEP: VIEW INSIGHTS */}
+      {onViewInsights && (
+        <Card className="p-6 bg-gradient-to-br from-primary/5 to-accent/5 border border-border/50">
+          <div className="text-center space-y-4">
+            <h3 className="text-xl font-semibold">Ready for Market Insights?</h3>
+            <p className="text-muted-foreground">
+              Get AI-powered analysis of your compensation data and personalized recommendations.
+            </p>
+            <Button size="lg" onClick={onViewInsights} className="gap-2">
+              View Market Insights
+              <TrendingUp className="h-5 w-5" />
+            </Button>
+          </div>
         </Card>
       )}
 

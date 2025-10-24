@@ -9,7 +9,11 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 
-export const TotalRewardsForm = () => {
+interface TotalRewardsFormProps {
+  onSubmitSuccess?: () => void;
+}
+
+export const TotalRewardsForm = ({ onSubmitSuccess }: TotalRewardsFormProps = {}) => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);
@@ -229,6 +233,13 @@ export const TotalRewardsForm = () => {
           ? "Your compensation data has been updated." 
           : `Your data has been submitted anonymously as "${profile.display_name}"`,
       });
+
+      // Navigate to benchmarks tab after short delay
+      if (onSubmitSuccess) {
+        setTimeout(() => {
+          onSubmitSuccess();
+        }, 1500);
+      }
 
       // Keep form populated after successful submit - don't reset
     } catch (error: any) {

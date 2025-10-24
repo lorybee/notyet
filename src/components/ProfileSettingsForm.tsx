@@ -17,6 +17,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 interface ProfileSettingsFormProps {
   userId: string;
   onDisplayNameUpdate?: (name: string) => void;
+  onSaveSuccess?: () => void;
 }
 
 const ROMANIAN_CITIES = [
@@ -61,7 +62,7 @@ const INDUSTRIES = [
   "Other",
 ];
 
-export const ProfileSettingsForm = ({ userId, onDisplayNameUpdate }: ProfileSettingsFormProps) => {
+export const ProfileSettingsForm = ({ userId, onDisplayNameUpdate, onSaveSuccess }: ProfileSettingsFormProps) => {
   const [displayName, setDisplayName] = useState("");
   const [city, setCity] = useState("");
   const [industry, setIndustry] = useState("");
@@ -141,6 +142,13 @@ export const ProfileSettingsForm = ({ userId, onDisplayNameUpdate }: ProfileSett
         title: "Profile updated",
         description: "Your profile settings have been saved successfully.",
       });
+
+      // Navigate to next tab after short delay
+      if (onSaveSuccess) {
+        setTimeout(() => {
+          onSaveSuccess();
+        }, 1500);
+      }
 
       // Hide success message after 5 seconds
       setTimeout(() => setJustSaved(false), 5000);

@@ -206,6 +206,7 @@ const Dashboard = () => {
                 <ProfileSettingsForm 
                   userId={user?.id || ''} 
                   onDisplayNameUpdate={setDisplayName}
+                  onSaveSuccess={() => setActiveTab("rewards")}
                 />
               </Card>
             </TabsContent>
@@ -218,12 +219,12 @@ const Dashboard = () => {
                     Submit your compensation data anonymously to contribute to market insights and access personalized benchmarks.
                   </p>
                 </div>
-                <TotalRewardsForm />
+                <TotalRewardsForm onSubmitSuccess={() => setActiveTab("benchmarks")} />
               </div>
             </TabsContent>
 
             <TabsContent value="benchmarks" className="mt-6">
-              <Benchmarks />
+              <Benchmarks onViewInsights={() => setActiveTab("insights")} />
             </TabsContent>
 
             <TabsContent value="insights" className="mt-6">
