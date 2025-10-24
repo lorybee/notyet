@@ -223,7 +223,7 @@ export const Benchmarks = () => {
       // 1. USER PROFILE WITH PERCENTILE
       const cityData = allData.filter((d: any) => d.city === userData.city);
       const similarProfiles = cityData.filter((d: any) => 
-        d.job_title === userData.job_title || d.industry === userData.industry
+        d.job_title === userData.job_title && d.experience_level === userData.experience_level
       );
       
       const totalCompValues = similarProfiles
@@ -248,7 +248,7 @@ export const Benchmarks = () => {
       });
 
       // 2. GROSS SALARY DISTRIBUTION BY EXPERIENCE LEVEL
-      const jobFamilyData = cityData.filter((d: any) => d.industry === userData.industry);
+      const jobFamilyData = cityData.filter((d: any) => d.job_title === userData.job_title);
       
       const grossDist: SalaryDistribution[] = EXP_LEVELS.map(level => {
         const levelData = jobFamilyData.filter((d: any) => d.experience_level === level);

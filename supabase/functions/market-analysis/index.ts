@@ -166,11 +166,12 @@ serve(async (req) => {
       userCompData = data;
     }
 
-    // Get market benchmarks - filter by user's city and experience level for freemium
+    // Get market benchmarks - filter by user's city, job title, and experience level
     const { data: marketData } = await supabase
       .from('compensation_data')
       .select('gross_salary, net_salary, job_title, experience_level, industry, city')
       .eq('city', userCompData.city)
+      .eq('job_title', userCompData.job_title)
       .eq('experience_level', userCompData.experience_level)
       .limit(100);
     
