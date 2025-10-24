@@ -1,12 +1,30 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Shield, Users, BarChart3 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import benchrightLogo from "@/assets/benchright-logo.png";
 import { Footer } from "@/components/Footer";
+import { supabase } from "@/integrations/supabase/client";
+import type { User } from "@supabase/supabase-js";
 
 const Landing = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    // Check if user is authenticated
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background flex flex-col">
@@ -25,12 +43,20 @@ const Landing = () => {
               <Button variant="ghost" className="text-base">
                 About
               </Button>
-              <Button variant="ghost" onClick={() => navigate("/auth")} className="text-base">
-                Sign In
-              </Button>
-              <Button onClick={() => navigate("/auth")} size="lg" className="text-base">
-                Get Started
-              </Button>
+              {user ? (
+                <Button onClick={() => navigate("/dashboard")} size="lg" className="text-base">
+                  Go to Dashboard
+                </Button>
+              ) : (
+                <>
+                  <Button variant="ghost" onClick={() => navigate("/auth")} className="text-base">
+                    Sign In
+                  </Button>
+                  <Button onClick={() => navigate("/auth")} size="lg" className="text-base">
+                    Get Started
+                  </Button>
+                </>
+              )}
             </div>
           </nav>
         </div>
