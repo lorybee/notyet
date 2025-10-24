@@ -7,16 +7,91 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+const MAX_REQUESTS_PER_WINDOW = 10;
+const WINDOW_HOURS = 20;
+const MAX_REQUEST_SIZE = 5000; // 5KB max request size
+
+async function checkRateLimit(supabase: any, ipAddress: string, endpoint: string) {
+  console.log(`Checking rate limit for IP: ${ipAddress}, endpoint: ${endpoint}`);
+  
+  // Clean up old entries first
+  await supabase
+    .from('rate_limits')
+    .delete()
+    .lt('first_request_at', new Date(Date.now() - WINDOW_HOURS * 60 * 60 * 1000).toISOString());
+
+  // Check current rate limit
+  const { data: existing, error: fetchError } = await supabase
+    .from('rate_limits')
+    .select('*')
+    .eq('ip_address', ipAddress)
+    .eq('endpoint', endpoint)
+    .maybeSingle();
+
+  if (fetchError) {
+    console.error('Rate limit fetch error:', fetchError);
+    throw new Error('Rate limit check failed');
+  }
+
+  const now = new Date();
+  
+  if (existing) {
+    const firstRequest = new Date(existing.first_request_at);
+    const hoursSinceFirst = (now.getTime() - firstRequest.getTime()) / (1000 * 60 * 60);
+    
+    console.log(`Existing rate limit: ${existing.request_count}/${MAX_REQUESTS_PER_WINDOW}, hours: ${hoursSinceFirst}`);
+    
+    if (hoursSinceFirst < WINDOW_HOURS) {
+      if (existing.request_count >= MAX_REQUESTS_PER_WINDOW) {
+        const hoursRemaining = Math.ceil(WINDOW_HOURS - hoursSinceFirst);
+        throw new Error(`Rate limit exceeded. Try again in ${hoursRemaining} hours.`);
+      }
+      
+      // Increment counter
+      await supabase
+        .from('rate_limits')
+        .update({
+          request_count: existing.request_count + 1,
+          last_request_at: now.toISOString()
+        })
+        .eq('id', existing.id);
+    } else {
+      // Reset counter if window expired
+      await supabase
+        .from('rate_limits')
+        .update({
+          request_count: 1,
+          first_request_at: now.toISOString(),
+          last_request_at: now.toISOString()
+        })
+        .eq('id', existing.id);
+    }
+  } else {
+    // Create new entry
+    await supabase
+      .from('rate_limits')
+      .insert({
+        ip_address: ipAddress,
+        endpoint: endpoint,
+        request_count: 1,
+        first_request_at: now.toISOString(),
+        last_request_at: now.toISOString()
+      });
+  }
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      throw new Error('LOVABLE_API_KEY not configured');
-    }
+    // Get IP address from request
+    const ipAddress = req.headers.get('x-forwarded-for')?.split(',')[0].trim() || 
+                      req.headers.get('x-real-ip') || 
+                      'unknown';
+    
+    console.log('Request from IP:', ipAddress);
 
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) {
@@ -26,11 +101,24 @@ serve(async (req) => {
     // Extract JWT token
     const token = authHeader.replace('Bearer ', '');
     
-    // Create client with service role to bypass RLS
+    // Create client with service role
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
+
+    // Check rate limit
+    try {
+      await checkRateLimit(supabase, ipAddress, 'market-analysis');
+    } catch (rateLimitError) {
+      console.error('Rate limit error:', rateLimitError);
+      return new Response(JSON.stringify({ 
+        error: rateLimitError instanceof Error ? rateLimitError.message : 'Rate limit exceeded' 
+      }), {
+        status: 429,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
     // Verify the JWT and get user
     const { data: { user }, error: userError } = await supabase.auth.getUser(token);
@@ -40,6 +128,11 @@ serve(async (req) => {
     }
 
     console.log('Authenticated user:', user.id);
+
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    if (!LOVABLE_API_KEY) {
+      throw new Error('LOVABLE_API_KEY not configured');
+    }
 
     // Get user's profile
     const { data: profile, error: profileError } = await supabase

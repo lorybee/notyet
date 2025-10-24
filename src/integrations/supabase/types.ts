@@ -182,11 +182,42 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limits: {
+        Row: {
+          created_at: string
+          endpoint: string
+          first_request_at: string
+          id: string
+          ip_address: string
+          last_request_at: string
+          request_count: number
+        }
+        Insert: {
+          created_at?: string
+          endpoint: string
+          first_request_at?: string
+          id?: string
+          ip_address: string
+          last_request_at?: string
+          request_count?: number
+        }
+        Update: {
+          created_at?: string
+          endpoint?: string
+          first_request_at?: string
+          id?: string
+          ip_address?: string
+          last_request_at?: string
+          request_count?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      cleanup_old_rate_limits: { Args: never; Returns: undefined }
       get_anonymous_id_for_user: {
         Args: { user_uuid: string }
         Returns: string
