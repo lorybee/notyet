@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Shield, Users, BarChart3 } from "lucide-react";
+import { Shield, Users, BarChart3, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import benchrightLogo from "@/assets/benchright-logo.png";
 import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import type { User } from "@supabase/supabase-js";
 
 const Landing = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -25,6 +27,22 @@ const Landing = () => {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut();
+      toast({
+        title: "Signed out",
+        description: "You have been signed out successfully.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background flex flex-col">
@@ -44,9 +62,15 @@ const Landing = () => {
                 About
               </Button>
               {user ? (
-                <Button onClick={() => navigate("/dashboard")} size="lg" className="text-base">
-                  Go to Dashboard
-                </Button>
+                <>
+                  <Button onClick={() => navigate("/dashboard")} size="lg" className="text-base">
+                    Go to Dashboard
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={handleSignOut}>
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sign Out
+                  </Button>
+                </>
               ) : (
                 <>
                   <Button variant="ghost" onClick={() => navigate("/auth")} className="text-base">
